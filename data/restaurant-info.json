@@ -1,0 +1,24 @@
+{
+  "name": "Delícias Burgers",
+  "tagline": "",
+  "description": "",
+  "location": {
+    "city": "",
+    "state": "",
+    "neighborhood": ""
+  },
+  "contact": {
+    "phone": "",
+    "whatsapp": "",
+    "instagram": ""
+  },
+  "site": {
+    "githubPages": "https://Felipe-Pqd90599.github.io/delicias-burgers-cardapio/",
+    "repo": "https://github.com/Felipe-Pqd90599/delicias-burgers-cardapio"
+  },
+  "meta": {
+    "source": "",
+    "lastUpdated": "2026-09-15",
+    "version": "0.1.0-g0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "delicias-burgers-cardapio",
+  "version": "0.1.0",
+  "description": "Cardápio online + PDF da Delícias Burgers — fonte única em data/menu-data.json",
+  "scripts": {
+    "qa-check": "node scripts/qa-check.js"
+  },
+  "keywords": ["cardapio", "delicias-burgers"],
+  "author": "Felipe Silva Pereira",
+  "license": "ISC"
+}

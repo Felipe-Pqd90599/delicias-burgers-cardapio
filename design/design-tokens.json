@@ -1,0 +1,21 @@
+{
+  "source": "A definir a partir do material oficial da Delícias Burgers (Gate G3).",
+  "note": "Não usar a paleta do Prainha. Não inventar cores de marca até o Felipe enviar logo/referência.",
+  "colors": {
+    "background": "#111111",
+    "surface": "#1a1a1a",
+    "primary": "#c4a35a",
+    "text": "#f5f5f5",
+    "textMuted": "#a8a8a8",
+    "price": "#e8c98a",
+    "border": "#2e2e2e"
+  },
+  "typography": {
+    "fontDisplay": "system-ui, sans-serif",
+    "fontBody": "system-ui, sans-serif"
+  },
+  "layout": {
+    "mobileFirst": true,
+    "categoryNav": "sticky horizontal scroll"
+  }
+}
