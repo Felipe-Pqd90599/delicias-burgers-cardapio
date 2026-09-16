@@ -1,0 +1,35 @@
+{
+  "source": "PDF oficial (8 páginas) + amostragem de operadores RGB e da capa",
+  "note": "Identidade amarelo + preto. Não usar paleta de outro restaurante.",
+  "colors": {
+    "background": "#0A0A0A",
+    "backgroundAlt": "#141414",
+    "surface": "#1A1A1A",
+    "primary": "#FFFF00",
+    "primaryGold": "#F8E018",
+    "accent": "#FFE020",
+    "text": "#FFFFFF",
+    "textMuted": "#C8C8C8",
+    "price": "#FFFF00",
+    "border": "#2A2A2A",
+    "whatsapp": "#25D366"
+  },
+  "typography": {
+    "fontDisplay": "Impact, \"Oswald\", \"Arial Black\", system-ui, sans-serif",
+    "fontScript": "\"Pacifico\", \"Segoe Script\", cursive",
+    "fontBody": "Georgia, \"Times New Roman\", serif",
+    "categoryStyle": "uppercase, branco, tracking amplo",
+    "priceStyle": "amarelo #FFFF00, peso forte"
+  },
+  "layout": {
+    "mobileFirst": true,
+    "categoryNav": "sticky horizontal scroll",
+    "itemLayout": "nome branco + descrição clara + preço amarelo",
+    "printReference": "páginas internas: fundo madeira escura, duas colunas"
+  },
+  "sampled": {
+    "fillRGB": ["#FFFFFF", "#FFFF00", "#000000"],
+    "coverGold": "#F8E018",
+    "coverBlack": "#0A0A0A"
+  }
+}
