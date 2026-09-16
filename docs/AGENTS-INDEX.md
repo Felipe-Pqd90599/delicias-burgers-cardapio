@@ -10,11 +10,11 @@ Este projeto reutiliza os **mesmos papéis** do cardápio Prainha, em arquivos *
 
 | # | Agente | Função no projeto | Entregas principais | Status |
 |---|--------|-------------------|---------------------|--------|
-| 0 | **Orquestrador** | Gates, delegação, deploy, imagens IA em lotes | Estrutura do repo, GitHub, coordenação | 🟡 G0 — estrutura pronta |
-| 1 | **Menu Content Architect** | Estrutura JSON: categorias, preços, ids | `menu-data.json`, `restaurant-info.json`, `CHANGELOG-content.md` | ⏳ Aguardando material |
-| 2 | **Brand Copywriter** | Tom de voz, descrições comerciais | `COPY-GUIDE.md`, descrições no JSON | ⏳ Depois do G1 |
-| 3 | **Design & UX Specialist** | Paleta, layout mobile, consistência visual | `design-tokens.json`, `layout-spec.md` | ⏳ Aguardando referências |
-| 4 | **Frontend Menu Developer** | Site online responsivo, WhatsApp, nav | `online/index.html`, `styles.css`, `app.js` | ⏳ Depois do G3 |
+| 0 | **Orquestrador** | Gates, delegação, deploy, imagens IA em lotes | Estrutura do repo, GitHub, coordenação | 🟡 G1 em validação |
+| 1 | **Menu Content Architect** | Estrutura JSON: categorias, preços, ids | `menu-data.json`, `restaurant-info.json`, `CHANGELOG-content.md` | 🟡 89 itens extraídos |
+| 2 | **Brand Copywriter** | Tom de voz, descrições comerciais | `COPY-GUIDE.md`, descrições no JSON | 🟡 Textos do PDF |
+| 3 | **Design & UX Specialist** | Paleta, layout mobile, consistência visual | `design-tokens.json`, `layout-spec.md` | 🟡 Amarelo/preto amostrados |
+| 4 | **Frontend Menu Developer** | Site online responsivo, WhatsApp, nav | `online/index.html`, `styles.css`, `app.js` | 🟡 Site G1; fotos depois |
 | 5 | **PDF Production Specialist** | PDF regenerável alinhado ao JSON | `print.html`, scripts PDF | ⏳ Quando o site existir |
 | 6 | **QA & Brand Reviewer** | Checklist preço/copy/mobile/PDF antes do deploy | `QA-REPORT.md`, `scripts/qa-check.js` | 🟡 Script base criado |
 | 7 | **Project Archivist** | Worklog, handoff, guias | `AGENT-WORKLOG.md`, `PROJECT-HANDOFF.md`, `EDIT-GUIDE.md` | 🟡 Docs iniciais |

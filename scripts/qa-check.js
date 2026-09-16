@@ -1,8 +1,6 @@
 /**
- * Checklist automatizado (Gate G4) — preços, fotos, JSON.
+ * Checklist: JSON, preços e fotos de categoria (não exige foto por item).
  * Uso: npm run qa-check
- *
- * No G0 o JSON pode estar vazio: isso é OK. Erros só quando houver itens inválidos.
  */
 const fs = require('fs');
 const path = require('path');
@@ -10,8 +8,7 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const menu = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/menu-data.json'), 'utf8'));
 const meta = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/images-meta.json'), 'utf8'));
-const fotosDir = path.join(ROOT, 'assets/fotos');
-const fotosPdfDir = path.join(ROOT, 'online/assets/fotos-pdf');
+const catDir = path.join(ROOT, 'assets/categorias');
 
 let errors = 0;
 let warnings = 0;
@@ -32,7 +29,7 @@ const items = menu.categories.flatMap((c) => c.items || []);
 const ids = new Set();
 
 if (menu.categories.length === 0) {
-  warn('menu-data.json ainda sem categorias (Gate G0)');
+  warn('menu-data.json ainda sem categorias');
 }
 
 for (const cat of menu.categories) {
@@ -42,6 +39,12 @@ for (const cat of menu.categories) {
         err(`itemRef inválido em ${cat.id}: ${refId}`);
       }
     }
+  }
+  if (cat.image) {
+    const file = path.join(ROOT, 'assets', cat.image);
+    if (!fs.existsSync(file)) err(`foto de categoria ausente: assets/${cat.image}`);
+  } else {
+    warn(`categoria sem imagem: ${cat.id}`);
   }
 }
 
@@ -55,24 +58,21 @@ for (const item of items) {
   } else if (typeof item.price !== 'number') {
     err(`${item.id}: price inválido`);
   }
-  const file = item.image || `${item.id}.jpg`;
-  const fotoPath = path.join(fotosDir, file);
-  if (!fs.existsSync(fotoPath)) err(`foto ausente: assets/fotos/${file} (${item.id})`);
-  const pdfThumb = path.join(fotosPdfDir, file);
-  if (!fs.existsSync(pdfThumb)) warn(`miniatura PDF ausente: online/assets/fotos-pdf/${file}`);
 }
 
-if (items.length > 0 && meta.missingCount > 0) {
-  err(`images-meta: ${meta.missingCount} fotos faltando`);
-} else {
-  ok(`images-meta: ${items.length} itens, missingCount ${meta.missingCount}`);
-}
-
+const catFiles = fs.existsSync(catDir)
+  ? fs.readdirSync(catDir).filter((f) => /\.(png|jpe?g)$/i.test(f))
+  : [];
+ok(`${catFiles.length} fotos de categoria em assets/categorias/`);
+ok(`images-meta missingCount ${meta.missingCount}`);
 ok(`${items.length} itens em ${menu.categories.length} categorias`);
 
 const onlinePdf = path.join(ROOT, 'online/cardapio-delicias-burgers.pdf');
-if (items.length > 0 && !fs.existsSync(onlinePdf)) {
-  warn('online/cardapio-delicias-burgers.pdf não encontrado — será gerado quando o pipeline de PDF existir');
+if (!fs.existsSync(onlinePdf)) {
+  warn('online/cardapio-delicias-burgers.pdf não encontrado — rode npm run generate-pdf');
+} else {
+  const mb = (fs.statSync(onlinePdf).size / (1024 * 1024)).toFixed(2);
+  ok(`PDF do site: ${mb} MB`);
 }
 
 console.log('---');

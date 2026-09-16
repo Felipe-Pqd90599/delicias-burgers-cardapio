@@ -1,8 +1,823 @@
 {
   "meta": {
-    "version": "0.1.0-g0",
-    "source": "",
-    "currency": "BRL"
+    "version": "0.5.0-pdf",
+    "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
+    "currency": "BRL",
+    "extractedAt": "2026-09-15",
+    "g1Approved": true
   },
-  "categories": []
+  "categories": [
+    {
+      "id": "rodizio",
+      "name": "Rodízio",
+      "order": 1,
+      "featured": true,
+      "image": "categorias/rodizio.png",
+      "note": "Das 18h às 23:30. Refrigerante incluso.",
+      "items": [
+        {
+          "id": "rodizio-delicias",
+          "name": "Rodízio Delícias",
+          "description": "Pizzas salgadas e doces, arroz cremoso, parmegiana, lasanha, batata frita e coxinha. Refrigerante incluso.",
+          "portionOptions": [
+            { "key": "terca-quinta", "label": "Terça a quinta", "price": 34.99 },
+            { "key": "sexta-domingo", "label": "Sexta a domingo", "price": 38.99 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sanduiches",
+      "name": "Sanduíches",
+      "order": 2,
+      "image": "categorias/sanduiches.png",
+      "items": [
+        {
+          "id": "delicias-simples",
+          "name": "Delícias Simples",
+          "price": 6,
+          "description": "Pão, carne grelhada, queijo cheddar, salada, molho especial",
+          "image": "delicias-simples.jpg"
+        },
+        {
+          "id": "delicias-especial",
+          "name": "Delícias Especial",
+          "price": 8,
+          "description": "Pão, carne grelhada, ovo, salsicha, presunto, queijo cheddar, salada, molho especial",
+          "image": "delicias-especial.jpg"
+        },
+        {
+          "id": "delicias-tudo",
+          "name": "Delícias Tudo",
+          "price": 10,
+          "description": "Pão, carne grelhada, ovo, presunto, queijo cheddar, calabresa, salada, molho especial",
+          "image": "delicias-tudo.jpg"
+        },
+        {
+          "id": "delicias-duplo-cheddar",
+          "name": "Delícias Duplo Cheddar",
+          "price": 10,
+          "description": "Pão, 2 carnes grelhadas, 2 queijos cheddar, salada, molho especial",
+          "image": "delicias-duplo-cheddar.jpg"
+        },
+        {
+          "id": "delicias-chicken",
+          "name": "Delícias Chicken",
+          "price": 14,
+          "description": "Pão, carne grelhada, ovo, frango, presunto, queijo cheddar, calabresa, salada, molho especial",
+          "image": "delicias-chicken.jpg"
+        },
+        {
+          "id": "delicias-bacon",
+          "name": "Delícias Bacon",
+          "price": 16,
+          "description": "Pão, carne grelhada, ovo, frango, presunto, queijo cheddar, bacon, salsicha, salada, molho especial",
+          "image": "delicias-bacon.jpg"
+        },
+        {
+          "id": "delicias-carne-de-sol",
+          "name": "Delícias Carne de Sol",
+          "price": 20,
+          "description": "Pão, carne grelhada, ovo, presunto, queijo cheddar, carne de sol, salada, molho especial",
+          "image": "delicias-carne-de-sol.jpg"
+        },
+        {
+          "id": "delicias-tudao",
+          "name": "Delícias Tudão",
+          "price": 20,
+          "description": "Pão, carne grelhada, ovo, presunto, queijo cheddar, calabresa, frango, salada, molho especial",
+          "image": "delicias-tudao.jpg"
+        },
+        {
+          "id": "delicias-sertanejo",
+          "name": "Delícias Sertanejo",
+          "price": 20,
+          "description": "Pão, carne grelhada, ovo, presunto, queijo coalho, carne de sol, salada, molho especial",
+          "image": "delicias-sertanejo.jpg"
+        },
+        {
+          "id": "delicias-camarao",
+          "name": "Delícias Camarão",
+          "price": 22,
+          "description": "Pão, carne grelhada, ovo, presunto, queijo cheddar, camarão, salada, molho especial",
+          "image": "delicias-camarao.jpg"
+        },
+        {
+          "id": "adicional-batata-frita",
+          "name": "Adicional de batata frita",
+          "description": "Porção extra de batata frita",
+          "image": "adicional-batata-frita.jpg",
+          "portionOptions": [
+            { "key": "P", "label": "P", "price": 5 },
+            { "key": "M", "label": "M", "price": 7 },
+            { "key": "G", "label": "G", "price": 9 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sanduiches-artesanais",
+      "name": "Sanduíches artesanais",
+      "order": 3,
+      "image": "categorias/sanduiches-artesanais.png",
+      "note": "Todos os sanduíches artesanais são acompanhados de batata frita",
+      "items": [
+        {
+          "id": "delicias-burguer",
+          "name": "Delícias Burguer",
+          "price": 20,
+          "description": "Pão especial, carne grelhada 130g, queijo cheddar, queijo muçarela, alface, tomate, cebola roxa, molho especial + 100g de batata frita",
+          "image": "delicias-burguer.jpg"
+        },
+        {
+          "id": "delicias-chicken-plus",
+          "name": "Delícias Chicken Plus",
+          "price": 27,
+          "description": "Pão especial, carne grelhada 130g, queijo cheddar, queijo muçarela, frango, catupiry, alface, tomate, cebola roxa, batata palha, molho especial + 100g de batata frita",
+          "image": "delicias-chicken-plus.jpg"
+        },
+        {
+          "id": "delicias-bacon-plus",
+          "name": "Delícias Bacon Plus",
+          "price": 27,
+          "description": "Pão especial, carne grelhada 130g, queijo cheddar, queijo muçarela, bacon, catupiry, alface, tomate, cebola roxa, batata palha, molho especial + 100g de batata frita",
+          "image": "delicias-bacon-plus.jpg"
+        },
+        {
+          "id": "delicias-americano",
+          "name": "Delícias Americano",
+          "price": 27,
+          "description": "Pão especial, carne grelhada 130g, queijo cheddar, queijo muçarela, presunto, calabresa, catupiry, alface, tomate, cebola roxa, batata palha, molho especial + 100g de batata frita",
+          "image": "delicias-americano.jpg"
+        },
+        {
+          "id": "delicias-nordestino",
+          "name": "Delícias Nordestino",
+          "price": 32,
+          "description": "Pão especial, carne grelhada 130g, queijo cheddar, queijo muçarela, carne de sol, queijo coalho, catupiry, alface, tomate, cebola roxa, molho especial + 100g de batata frita",
+          "image": "delicias-nordestino.jpg"
+        },
+        {
+          "id": "delicias-double",
+          "name": "Delícias Double",
+          "price": 32,
+          "description": "Pão especial, 2 carnes grelhadas de 130g, 2 queijos cheddar, presunto, catupiry, alface, tomate, cebola roxa, batata palha, molho especial + 100g de batata frita",
+          "image": "delicias-double.jpg"
+        },
+        {
+          "id": "delicias-barbecue",
+          "name": "Delícias Barbecue",
+          "price": 34,
+          "description": "Pão especial, carne grelhada de 130g, 2 queijos cheddar, bacon, molho barbecue, alface, tomate, cebola roxa + 100g de batata frita",
+          "image": "delicias-barbecue.jpg"
+        },
+        {
+          "id": "delicias-tudo-plus",
+          "name": "Delícias Tudo Plus",
+          "price": 36,
+          "description": "Pão especial, carne grelhada de 130g, frango, queijo cheddar, catupiry, calabresa, alface, tomate, cebola roxa, molho especial + 100g de batata frita",
+          "image": "delicias-tudo-plus.jpg"
+        },
+        {
+          "id": "delicias-camarao-plus",
+          "name": "Delícias Camarão Plus",
+          "price": 39,
+          "description": "Pão especial, carne grelhada de 130g, camarão, queijo cheddar, catupiry, alface, tomate, cebola roxa, molho especial + 100g de batata frita",
+          "image": "delicias-camarao-plus.jpg"
+        }
+      ]
+    },
+    {
+      "id": "pizzas",
+      "name": "Pizzas",
+      "order": 4,
+      "image": "categorias/pizzas.png",
+      "note": "Preços G e GG",
+      "items": [
+        {
+          "id": "pizza-mucarela",
+          "name": "Muçarela",
+          "description": "Molho de tomate, muçarela e orégano",
+          "image": "pizza-mucarela.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 35 },
+            { "key": "GG", "label": "GG", "price": 40 }
+          ]
+        },
+        {
+          "id": "pizza-marguerita",
+          "name": "Marguerita",
+          "description": "Molho de tomate, muçarela, tomate e manjericão",
+          "image": "pizza-marguerita.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 30 },
+            { "key": "GG", "label": "GG", "price": 40 }
+          ]
+        },
+        {
+          "id": "pizza-frango-catupiry",
+          "name": "Frango com Catupiry",
+          "description": "Molho de tomate, muçarela, frango, catupiry, azeitona e orégano",
+          "image": "pizza-frango-catupiry.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 46 }
+          ]
+        },
+        {
+          "id": "pizza-frango-cheddar",
+          "name": "Frango com Cheddar",
+          "description": "Molho de tomate, muçarela, frango, cheddar, azeitona e orégano",
+          "image": "pizza-frango-cheddar.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 46 }
+          ]
+        },
+        {
+          "id": "pizza-frango",
+          "name": "Frango",
+          "description": "Molho de tomate, muçarela, frango, azeitona e orégano",
+          "image": "pizza-frango.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 46 }
+          ]
+        },
+        {
+          "id": "pizza-calabresa-catupiry",
+          "name": "Calabresa c/ Catupiry",
+          "description": "Molho de tomate, muçarela, calabresa acebolada, catupiry e orégano",
+          "image": "pizza-calabresa-catupiry.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 46 }
+          ]
+        },
+        {
+          "id": "pizza-calabresa",
+          "name": "Calabresa",
+          "description": "Molho de tomate, muçarela, calabresa acebolada e orégano",
+          "image": "pizza-calabresa.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 46 }
+          ]
+        },
+        {
+          "id": "pizza-4-queijos",
+          "name": "4 Queijos",
+          "description": "Molho de tomate, muçarela, queijo coalho, catupiry e cheddar",
+          "image": "pizza-4-queijos.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 43 },
+            { "key": "GG", "label": "GG", "price": 50 }
+          ]
+        },
+        {
+          "id": "pizza-atum",
+          "name": "Atum",
+          "description": "Molho de tomate, muçarela, atum e cebola",
+          "image": "pizza-atum.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 50 }
+          ]
+        },
+        {
+          "id": "pizza-brasileira",
+          "name": "Brasileira",
+          "description": "Molho de tomate, muçarela, calabresa, queijo coalho, milho, ervilha, cebola e azeitona",
+          "image": "pizza-brasileira.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 42 },
+            { "key": "GG", "label": "GG", "price": 48 }
+          ]
+        },
+        {
+          "id": "pizza-portuguesa",
+          "name": "Portuguesa",
+          "description": "Molho de tomate, muçarela, ovo, presunto, pimentão, cebola e orégano",
+          "image": "pizza-portuguesa.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 42 },
+            { "key": "GG", "label": "GG", "price": 50 }
+          ]
+        },
+        {
+          "id": "pizza-delicias-da-casa",
+          "name": "Delícias da Casa",
+          "description": "Molho de tomate, muçarela, cebola, tomate, calabresa, frango, orégano e azeitona",
+          "image": "pizza-delicias-da-casa.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 45 }
+          ]
+        },
+        {
+          "id": "pizza-carne-de-sol",
+          "name": "Carne de Sol",
+          "description": "Molho de tomate, muçarela, carne de sol, cebola, azeitona e orégano",
+          "image": "pizza-carne-de-sol.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 46 },
+            { "key": "GG", "label": "GG", "price": 57 }
+          ]
+        },
+        {
+          "id": "pizza-carne-sol-catupiry",
+          "name": "Carne de Sol c/ Catupiry",
+          "description": "Molho de tomate, muçarela, carne de sol, catupiry, cebola, azeitona e orégano",
+          "image": "pizza-carne-sol-catupiry.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 55 },
+            { "key": "GG", "label": "GG", "price": 65 }
+          ]
+        },
+        {
+          "id": "pizza-carne-sol-creme-cheese",
+          "name": "Carne de Sol ao Creme Cheese",
+          "description": "Molho de tomate, muçarela, carne de sol, creme cheese, cebola e azeitona",
+          "image": "pizza-carne-sol-creme-cheese.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 55 },
+            { "key": "GG", "label": "GG", "price": 65 }
+          ]
+        },
+        {
+          "id": "pizza-sertaneja",
+          "name": "Sertaneja",
+          "description": "Molho de tomate, muçarela, carne de sol, queijo coalho, cebola e azeitona",
+          "image": "pizza-sertaneja.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 55 },
+            { "key": "GG", "label": "GG", "price": 65 }
+          ]
+        },
+        {
+          "id": "pizza-bacon-a-moda",
+          "name": "Bacon à Moda",
+          "description": "Molho de tomate, muçarela, bacon, pimentão, milho, ervilha e tomate",
+          "image": "pizza-bacon-a-moda.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 40 },
+            { "key": "GG", "label": "GG", "price": 50 }
+          ]
+        },
+        {
+          "id": "pizza-lombo",
+          "name": "Lombo",
+          "description": "Molho de tomate, muçarela, lombo, catupiry, orégano e azeitona",
+          "image": "pizza-lombo.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 55 },
+            { "key": "GG", "label": "GG", "price": 65 }
+          ]
+        },
+        {
+          "id": "pizza-camarao",
+          "name": "Camarão",
+          "description": "Molho de tomate, muçarela, camarão, azeitona e cebola",
+          "image": "pizza-camarao.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 62 },
+            { "key": "GG", "label": "GG", "price": 70 }
+          ]
+        },
+        {
+          "id": "pizza-camarao-catupiry",
+          "name": "Camarão ao Catupiry",
+          "description": "Molho de tomate, muçarela, camarão, catupiry, azeitona, orégano e cebola",
+          "image": "pizza-camarao-catupiry.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 65 },
+            { "key": "GG", "label": "GG", "price": 75 }
+          ]
+        },
+        {
+          "id": "pizza-camarao-creme-cheese",
+          "name": "Camarão ao Creme Cheese",
+          "description": "Molho de tomate, muçarela, camarão, creme cheese, azeitona, orégano e cebola",
+          "image": "pizza-camarao-creme-cheese.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 65 },
+            { "key": "GG", "label": "GG", "price": 75 }
+          ]
+        },
+        {
+          "id": "pizza-banana-nevada",
+          "name": "Banana Nevada",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate, banana e canela",
+          "image": "pizza-banana-nevada.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-prestigio",
+          "name": "Prestígio",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate preto e coco ralado",
+          "image": "pizza-prestigio.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-beijinho",
+          "name": "Beijinho",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate branco e coco ralado",
+          "image": "pizza-beijinho.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-confete",
+          "name": "Confete",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate e confete",
+          "image": "pizza-confete.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-dois-amores",
+          "name": "Dois Amores",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate branco e creme de chocolate preto",
+          "image": "pizza-dois-amores.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-romeu-julieta",
+          "name": "Romeu e Julieta",
+          "kind": "doce",
+          "description": "Muçarela e pasta de goiabada",
+          "image": "pizza-romeu-julieta.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        },
+        {
+          "id": "pizza-abacaxi-nevado",
+          "name": "Abacaxi Nevado",
+          "kind": "doce",
+          "description": "Muçarela, creme de chocolate e abacaxi",
+          "image": "pizza-abacaxi-nevado.jpg",
+          "portionOptions": [
+            { "key": "G", "label": "G", "price": 45 },
+            { "key": "GG", "label": "GG", "price": 56 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pasteis",
+      "name": "Pastéis",
+      "order": 5,
+      "image": "categorias/pasteis.png",
+      "items": [
+        {
+          "id": "pastel-queijo",
+          "name": "Queijo",
+          "price": 7,
+          "description": "Queijo muçarela ou coalho",
+          "image": "pastel-queijo.jpg"
+        },
+        {
+          "id": "pastel-pizza",
+          "name": "Pizza",
+          "price": 8,
+          "description": "Queijo muçarela, presunto, tomate, orégano, milho e ervilha",
+          "image": "pastel-pizza.jpg"
+        },
+        {
+          "id": "pastel-quatro-queijos",
+          "name": "Quatro Queijos",
+          "price": 10,
+          "description": "Queijo muçarela, coalho, catupiry e cheddar",
+          "image": "pastel-quatro-queijos.jpg"
+        },
+        {
+          "id": "pastel-sertaneja",
+          "name": "Sertaneja",
+          "price": 17,
+          "description": "Queijo muçarela, coalho, carne de sol, milho e ervilha",
+          "image": "pastel-sertaneja.jpg"
+        },
+        {
+          "id": "pastel-sertaneja-bacon",
+          "name": "Sertaneja Bacon",
+          "price": 20,
+          "description": "Queijo muçarela, coalho, catupiry, cheddar, carne de sol, bacon, milho e ervilha",
+          "image": "pastel-sertaneja-bacon.jpg"
+        },
+        {
+          "id": "pastel-carne-moida",
+          "name": "Carne Moída",
+          "price": 14,
+          "description": "Queijo muçarela, catupiry, carne moída, azeitona, milho e ervilha",
+          "image": "pastel-carne-moida.jpg"
+        },
+        {
+          "id": "pastel-camarao",
+          "name": "Camarão",
+          "price": 20,
+          "description": "Queijo muçarela, catupiry, camarão, milho e ervilha",
+          "image": "pastel-camarao.jpg"
+        },
+        {
+          "id": "pastel-camarao-bacon",
+          "name": "Camarão c/ Bacon",
+          "price": 22,
+          "description": "Queijo muçarela, catupiry, cheddar, bacon, camarão, milho e ervilha",
+          "image": "pastel-camarao-bacon.jpg"
+        },
+        {
+          "id": "pastel-calabresa",
+          "name": "Calabresa",
+          "price": 12,
+          "description": "Queijo muçarela, catupiry, cheddar, calabresa, milho e ervilha",
+          "image": "pastel-calabresa.jpg"
+        },
+        {
+          "id": "pastel-calabresa-coalho",
+          "name": "Calabresa Coalho",
+          "price": 15,
+          "description": "Queijo muçarela, catupiry, cheddar, coalho, calabresa, milho e ervilha",
+          "image": "pastel-calabresa-coalho.jpg"
+        },
+        {
+          "id": "pastel-frango",
+          "name": "Frango",
+          "price": 12,
+          "description": "Queijo muçarela, catupiry, cheddar, frango, milho e ervilha",
+          "image": "pastel-frango.jpg"
+        },
+        {
+          "id": "pastel-frango-coalho",
+          "name": "Frango Coalho",
+          "price": 15,
+          "description": "Queijo muçarela, catupiry, cheddar, coalho, frango, milho e ervilha",
+          "image": "pastel-frango-coalho.jpg"
+        },
+        {
+          "id": "pastel-frango-bacon",
+          "name": "Frango Bacon",
+          "price": 18,
+          "description": "Queijo muçarela, catupiry, cheddar, bacon, frango, milho e ervilha",
+          "image": "pastel-frango-bacon.jpg"
+        },
+        {
+          "id": "pastel-banana-nevada",
+          "name": "Banana Nevada",
+          "kind": "doce",
+          "price": 18,
+          "description": "Pasta de chocolate branco, banana e canela",
+          "image": "pastel-banana-nevada.jpg"
+        },
+        {
+          "id": "pastel-dois-amores",
+          "name": "Dois Amores",
+          "kind": "doce",
+          "price": 18,
+          "description": "Mix de pasta de chocolate branco e preto",
+          "image": "pastel-dois-amores.jpg"
+        },
+        {
+          "id": "pastel-romeu-julieta",
+          "name": "Romeu e Julieta",
+          "kind": "doce",
+          "price": 18,
+          "description": "Queijo muçarela, coalho, pasta de goiabada",
+          "image": "pastel-romeu-julieta.jpg"
+        }
+      ]
+    },
+    {
+      "id": "petiscos",
+      "name": "Petiscos",
+      "order": 6,
+      "image": "categorias/petiscos.png",
+      "items": [
+        {
+          "id": "calabresa-com-fritas",
+          "name": "Calabresa com Fritas",
+          "description": "Calabresa acebolada com batata frita",
+          "image": "calabresa-com-fritas.jpg",
+          "portionOptions": [
+            { "key": "M", "label": "M", "price": 30 },
+            { "key": "G", "label": "G", "price": 40 }
+          ]
+        },
+        {
+          "id": "frango-com-fritas",
+          "name": "Frango com Fritas",
+          "description": "Tiras de filé de frango à milanesa com batata frita",
+          "image": "frango-com-fritas.jpg",
+          "portionOptions": [
+            { "key": "M", "label": "M", "price": 35 },
+            { "key": "G", "label": "G", "price": 45 }
+          ]
+        },
+        {
+          "id": "delicias-fritas",
+          "name": "Delícias Fritas",
+          "description": "Batata frita com catupiry ou cheddar e bacon",
+          "image": "delicias-fritas.jpg",
+          "portionOptions": [
+            { "key": "M", "label": "M", "price": 30 },
+            { "key": "G", "label": "G", "price": 40 }
+          ]
+        },
+        {
+          "id": "mini-coxinhas",
+          "name": "Mini Coxinhas",
+          "price": 10,
+          "description": "20 unidades",
+          "image": "mini-coxinhas.jpg"
+        }
+      ]
+    },
+    {
+      "id": "combos",
+      "name": "Combos",
+      "order": 7,
+      "image": "categorias/combos.png",
+      "items": [
+        {
+          "id": "combo-kids-1",
+          "name": "Combo Kids 1",
+          "price": 24,
+          "description": "100g de batata frita + 200 ml de refrigerante + 1 cheeseburguer simples (pão, carne grelhada e queijo) + 2 bolas de sorvete",
+          "image": "combo-kids-1.jpg"
+        },
+        {
+          "id": "combo-kids-2",
+          "name": "Combo Kids 2",
+          "price": 21,
+          "description": "100g de batata frita + 200 ml de refrigerante + 1 fatia de pizza (consultar sabores) + 2 bolas de sorvete",
+          "image": "combo-kids-2.jpg"
+        },
+        {
+          "id": "combo-delicias-1",
+          "name": "Combo Delícias 1",
+          "price": 25,
+          "description": "1 Delícias Especial + 100g de batata frita + 1 milk-shake",
+          "image": "combo-delicias-1.jpg"
+        },
+        {
+          "id": "combo-delicias-2",
+          "name": "Combo Delícias 2",
+          "price": 20,
+          "description": "1 Delícias Especial + 100g de batata frita + 1 refrigerante lata",
+          "image": "combo-delicias-2.jpg"
+        },
+        {
+          "id": "combo-casal",
+          "name": "Combo Casal",
+          "price": 34,
+          "description": "2 Delícias Tudo + 100g de batata frita + 1 refrigerante 1 litro",
+          "image": "combo-casal.jpg"
+        },
+        {
+          "id": "combo-familia",
+          "name": "Combo Família",
+          "price": 60,
+          "description": "4 Delícias Tudo + fritas tam. M com cheddar + refrigerante de 1 litro",
+          "image": "combo-familia.jpg"
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "name": "Bebidas",
+      "order": 8,
+      "image": "categorias/bebidas.png",
+      "items": [
+        {
+          "id": "caipirinha",
+          "name": "Caipirinha",
+          "price": 8,
+          "image": "caipirinha.jpg"
+        },
+        {
+          "id": "agua-mineral",
+          "name": "Água mineral",
+          "price": 2.5,
+          "image": "agua-mineral.jpg"
+        },
+        {
+          "id": "agua-com-gas",
+          "name": "Água com gás",
+          "price": 3,
+          "image": "agua-com-gas.jpg"
+        },
+        {
+          "id": "refrigerante-lata",
+          "name": "Refrigerante lata",
+          "price": 6,
+          "image": "refrigerante-lata.jpg"
+        },
+        {
+          "id": "coca-1-litro",
+          "name": "Coca 1 litro",
+          "price": 10,
+          "image": "coca-1-litro.jpg"
+        },
+        {
+          "id": "pepsi-guarana-1l",
+          "name": "Pepsi/Guaraná 1L",
+          "price": 8,
+          "image": "pepsi-guarana-1l.jpg"
+        },
+        {
+          "id": "cerveja-lata",
+          "name": "Cerveja lata",
+          "price": 4.5,
+          "image": "cerveja-lata.jpg"
+        },
+        {
+          "id": "cerveja-long-neck",
+          "name": "Cerveja long neck",
+          "price": 9,
+          "image": "cerveja-long-neck.jpg"
+        },
+        {
+          "id": "milk-shake-400ml",
+          "name": "Milk shake 400ml",
+          "price": 14,
+          "description": "Consultar sabores",
+          "image": "milk-shake-400ml.jpg"
+        },
+        {
+          "id": "suco",
+          "name": "Suco",
+          "description": "Consultar sabores",
+          "image": "suco.jpg",
+          "price": 7,
+          "priceLabel": "400ml",
+          "priceSecondary": 17,
+          "priceSecondaryLabel": "jarra 1L"
+        },
+        {
+          "id": "suco-ao-leite",
+          "name": "Suco ao leite",
+          "description": "Consultar sabores",
+          "image": "suco-ao-leite.jpg",
+          "price": 8,
+          "priceLabel": "400ml",
+          "priceSecondary": 18,
+          "priceSecondaryLabel": "jarra 1L"
+        },
+        {
+          "id": "suco-laranja-limao",
+          "name": "Suco laranja/limão",
+          "image": "suco-laranja-limao.jpg",
+          "price": 8,
+          "priceLabel": "400ml",
+          "priceSecondary": 20,
+          "priceSecondaryLabel": "jarra 1L"
+        }
+      ]
+    },
+    {
+      "id": "acai-sorvete",
+      "name": "Açaí e sorvete",
+      "order": 9,
+      "image": "categorias/acai-sorvete.png",
+      "items": [
+        {
+          "id": "acai",
+          "name": "Açaí",
+          "description": "+ 4 acompanhamentos",
+          "image": "acai.jpg",
+          "portionOptions": [
+            { "key": "200ml", "label": "200 ml", "price": 8 },
+            { "key": "300ml", "label": "300 ml", "price": 12 },
+            { "key": "500ml", "label": "500 ml", "price": 18 }
+          ]
+        },
+        {
+          "id": "sorvete",
+          "name": "Sorvete",
+          "price": 4,
+          "description": "2 bolas + 2 acompanhamentos. Consultar sabores",
+          "image": "sorvete.jpg"
+        }
+      ]
+    }
+  ]
 }

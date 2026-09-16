@@ -1,6 +1,6 @@
 # Project Handoff — Delícias Burgers Cardápio
 
-**Versão:** 0.1.0-g0  
+**Versão:** 0.2.0-g1  
 **Data:** 2026-09-15  
 **Cliente / dono:** Felipe  
 **Pasta local:** `C:\Users\Felipe\delicias-burgers-cardapio\`  
@@ -43,8 +43,8 @@ npm run qa-check
 
 | Gate | Status |
 |------|--------|
-| G0 Plano | 🟡 |
-| G1 JSON | ⏳ |
-| G2 Copy | ⏳ |
-| G3 Visual | ⏳ |
+| G0 Plano | ✅ |
+| G1 JSON | 🟡 Extraído do PDF — conferir com Felipe |
+| G2 Copy | 🟡 Textos do PDF |
+| G3 Visual | 🟡 Tokens amarelo/preto; site ainda não |
 | G4 Site + PDF + QA | ⏳ |

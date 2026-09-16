@@ -1,24 +1,45 @@
 {
   "name": "Delícias Burgers",
-  "tagline": "",
-  "description": "",
+  "tagline": "Cardápio oficial",
+  "description": "Rodízio, hambúrgueres, pizzas, pastéis e combos na Zona Norte de Natal.",
   "location": {
-    "city": "",
-    "state": "",
-    "neighborhood": ""
+    "city": "Natal",
+    "state": "RN",
+    "neighborhood": "Zona Norte",
+    "address": "Avenida Doutor João Medeiros Filho, 3030"
   },
   "contact": {
-    "phone": "",
-    "whatsapp": "",
-    "instagram": ""
+    "phone": "(84) 98669-4702",
+    "phoneSecondary": "(84) 98620-5442",
+    "whatsapp": "5584986694702",
+    "whatsappSecondary": "5584986205442",
+    "instagram": "@deliciasburgerszonanorte"
+  },
+  "wifi": {
+    "ssid": "Delicias Burgers",
+    "password": "@Delicias123",
+    "security": "WPA",
+    "qrImage": "assets/wifi-qr.png"
+  },
+  "hours": {
+    "pizzaRodizio": "Das 18h às 23:30",
+    "rodizioWeekday": "Terça a quinta R$ 34,99",
+    "rodizioWeekend": "Sexta a domingo R$ 38,99"
+  },
+  "policies": {
+    "birthdayRodizio": [
+      "Trazendo 10 adultos pagantes o rodízio do aniversariante é por conta da casa",
+      "Trazendo 5 adultos pagantes o aniversariante paga meio rodízio"
+    ]
   },
   "site": {
     "githubPages": "https://Felipe-Pqd90599.github.io/delicias-burgers-cardapio/",
     "repo": "https://github.com/Felipe-Pqd90599/delicias-burgers-cardapio"
   },
   "meta": {
-    "source": "",
+    "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "lastUpdated": "2026-09-15",
-    "version": "0.1.0-g0"
+    "version": "0.5.0-pdf",
+    "g1Approved": true
   }
 }

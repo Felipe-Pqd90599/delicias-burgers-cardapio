@@ -1,0 +1,6 @@
+{
+  "convention": "Uma foto por categoria em assets/categorias/{id}.png — itens não precisam de foto individual",
+  "missingCount": 0,
+  "note": "G1+: fotos só nas categorias. Itens continuam sem imagem própria.",
+  "items": {}
+}

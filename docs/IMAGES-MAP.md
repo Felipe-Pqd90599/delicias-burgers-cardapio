@@ -2,10 +2,20 @@
 
 ## Convenção
 
+Uma foto **por categoria**, não por item:
+
 ```
-assets/fotos/{item.id}.jpg  →  item no JSON  →  online + PDF
+assets/categorias/{categoria}.png  →  banner da seção no site
 ```
 
-**Para trocar uma foto:** substitua o arquivo mantendo o **mesmo nome**.
-
-Tabela item → arquivo será preenchida no G1, quando os ids existirem.
+| Categoria | Arquivo |
+|-----------|---------|
+| Rodízio | `rodizio.png` |
+| Sanduíches | `sanduiches.png` |
+| Sanduíches artesanais | `sanduiches-artesanais.png` |
+| Pizzas | `pizzas.png` |
+| Pastéis | `pasteis.png` |
+| Petiscos | `petiscos.png` |
+| Combos | `combos.png` |
+| Bebidas | `bebidas.png` |
+| Açaí e sorvete | `acai-sorvete.png` |

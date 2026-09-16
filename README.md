@@ -6,7 +6,7 @@ Projeto **separado** do Prainha Rooftop. Mesma forma de trabalhar (orquestrador 
 
 ## Status
 
-**Gate G0** — estrutura criada. Conteúdo, visual e site ainda não começaram.
+**Rodízio em destaque** (R$ 34,99 terça a quinta / R$ 38,99 sexta a domingo). Fotos só nas categorias. Wi-Fi no final da página.
 
 Quando existir o site:
 
@@ -17,7 +17,7 @@ https://Felipe-Pqd90599.github.io/delicias-burgers-cardapio/
 ```
 data/menu-data.json       → itens, preços, categorias (fonte principal)
 data/restaurant-info.json → nome, contato, links
-design/design-tokens.json → cores e tipografia (a definir)
+design/design-tokens.json → cores oficiais (preto + amarelo)
 online/                   → site publicado (GitHub Pages)
 assets/fotos/             → fotos dos itens ({id}.jpg)
 assets/referencias/       → PDF/fotos oficiais do cliente
@@ -29,10 +29,9 @@ docs/                     → guias, agentes, QA
 ## Comandos
 
 ```bash
-npm run qa-check    # valida JSON e fotos antes do deploy
+npm run sync-online    # copia JSON + gera QR do Wi-Fi
+npm run qa-check       # valida JSON e fotos antes do deploy
 ```
-
-Novos scripts (sync, PDF, fotos) entram conforme o projeto avançar.
 
 ## Orquestração de agentes
 

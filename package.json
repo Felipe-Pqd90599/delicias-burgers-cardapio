@@ -1,11 +1,21 @@
 {
   "name": "delicias-burgers-cardapio",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Cardápio online + PDF da Delícias Burgers — fonte única em data/menu-data.json",
   "scripts": {
-    "qa-check": "node scripts/qa-check.js"
+    "qa-check": "node scripts/qa-check.js",
+    "wifi-qr": "node scripts/generate-wifi-qr.js",
+    "sync-online": "node scripts/generate-wifi-qr.js && node scripts/sync-online-data.js",
+    "generate-pdf": "node scripts/generate-pdf.js"
   },
-  "keywords": ["cardapio", "delicias-burgers"],
+  "keywords": [
+    "cardapio",
+    "delicias-burgers"
+  ],
   "author": "Felipe Silva Pereira",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer-core": "^21.11.0",
+    "qrcode": "^1.5.4"
+  }
 }

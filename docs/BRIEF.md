@@ -1,26 +1,24 @@
 # Brief — Delícias Burgers Cardápio
 
-**Status:** G0 — estrutura do projeto criada  
+**Status:** G1 aprovado · site online montado (G4 parcial — ainda sem fotos por item e sem PDF regenerável)  
 **Data:** 2026-09-15  
 **Orquestrador:** Cursor Agent + skill `delicias-menu-orchestrator`
 
-## O que já está decidido
+## Materiais recebidos
 
-1. **Projeto independente** do Prainha Rooftop (pasta, GitHub, marca, conteúdo)
-2. **Fonte de dados:** `data/menu-data.json`
+| Arquivo | Uso |
+|---------|-----|
+| `assets/referencias/cardapio-oficial-delicias-burgers.pdf` | Produtos, preços, contato, paleta, layout |
+| `assets/referencias/capa.png` | Logo e identidade da capa |
+
+## Decisões
+
+1. **Cores:** preto `#0A0A0A` + amarelo de preço `#FFFF00` + dourado da capa `#F8E018` → `design/design-tokens.json`
+2. **Fonte de dados:** `data/menu-data.json` (89 itens)
 3. **Hospedagem prevista:** GitHub Pages
-4. **Agentes:** mesmos 7 papéis + orquestrador; funções novas só quando o projeto pedir
+4. Copy: textos do PDF, sem inventar ingredientes
 
-## Materiais ainda necessários (Felipe)
-
-| Material | Para quê | Gate |
-|----------|----------|------|
-| PDF / foto / planilha do cardápio | Produtos e preços | G1 |
-| Logo, cores, referências visuais | Identidade | G3 |
-| Telefone, WhatsApp, Instagram, endereço | Contato no site | G1 |
-| Tom de voz desejado (se houver) | Copy | G2 |
-
-## Links (preencher quando o GitHub existir)
+## Links (quando o GitHub existir)
 
 - Repositório: https://github.com/Felipe-Pqd90599/delicias-burgers-cardapio
 - Site: https://Felipe-Pqd90599.github.io/delicias-burgers-cardapio/
@@ -29,8 +27,8 @@
 
 | Gate | Status |
 |------|--------|
-| G0 — Plano e estrutura | 🟡 Estrutura criada; briefing de conteúdo pendente |
-| G1 — JSON | ⏳ |
-| G2 — Copy | ⏳ |
-| G3 — Visual | ⏳ |
-| G4 — PDF + online + QA | ⏳ |
+| G0 — Plano e estrutura | ✅ |
+| G1 — JSON | ✅ Aprovado pelo Felipe |
+| G2 — Copy | ✅ Textos do PDF |
+| G3 — Visual | ✅ Tokens amarelo/preto |
+| G4 — PDF + online + QA | 🟡 Site no ar localmente; fotos e PDF ainda faltam |

@@ -4,3 +4,5 @@ assets/referencias/pages/
 output/
 .DS_Store
 Thumbs.db
+.cursor/mcp.json
+.env

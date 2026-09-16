@@ -1,30 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Delícias Burgers — Cardápio</title>
-  <style>
-    :root { color-scheme: dark; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: system-ui, sans-serif;
-      background: #111;
-      color: #f5f5f5;
-      text-align: center;
-      padding: 2rem;
-    }
-    h1 { font-size: 1.75rem; margin: 0 0 0.5rem; }
-    p { color: #a8a8a8; max-width: 28rem; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>Delícias Burgers</h1>
-    <p>Cardápio em construção. Os itens entram em <code>data/menu-data.json</code> a partir do Gate G1.</p>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delícias Burgers — Cardápio</title>
+    <meta
+      name="description"
+      content="Rodízio, sanduíches, pizzas e pastéis da Delícias Burgers na Zona Norte de Natal-RN."
+    />
+    <meta property="og:title" content="Delícias Burgers — Cardápio" />
+    <meta
+      property="og:description"
+      content="Veja o cardápio completo, conecte no Wi-Fi e peça pelo WhatsApp."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/capa.png" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Pacifico&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=0.5.0-pdf" />
+  </head>
+  <body>
+    <h1 class="sr-only">Delícias Burgers — Cardápio</h1>
+    <header class="hero" id="topo">
+      <div class="hero__photo" aria-hidden="true"></div>
+      <div class="hero__veil"></div>
+      <div class="hero__content">
+        <p class="hero__place" id="hero-place"></p>
+        <div class="hero__actions" id="hero-actions"></div>
+      </div>
+    </header>
+
+    <div id="featured-root"></div>
+
+    <nav class="cat-nav" id="cat-nav" aria-label="Categorias"></nav>
+    <main class="menu" id="menu"></main>
+
+    <footer class="footer" id="footer"></footer>
+
+    <section class="wifi" id="wifi" aria-labelledby="wifi-title" hidden>
+      <div class="wifi__text">
+        <h2 id="wifi-title">Wi-Fi da casa</h2>
+        <p class="wifi__hint">Aponte a câmera do celular no QR para conectar</p>
+        <p class="wifi__row">
+          Rede <strong id="wifi-ssid"></strong>
+        </p>
+        <p class="wifi__row">
+          Senha <strong id="wifi-password"></strong>
+        </p>
+      </div>
+      <img class="wifi__qr" id="wifi-qr" alt="QR Code para conectar no Wi-Fi" />
+    </section>
+
+    <div class="modal" id="modal" hidden>
+      <div class="modal__backdrop" data-close></div>
+      <div class="modal__sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal__close" type="button" data-close aria-label="Fechar">×</button>
+        <h3 id="modal-title"></h3>
+        <p class="modal__desc" id="modal-desc"></p>
+        <div class="modal__portions" id="modal-portions"></div>
+        <p class="modal__price" id="modal-price"></p>
+        <div class="modal__wa" id="modal-wa"></div>
+      </div>
+    </div>
+
+    <script src="app.js?v=0.5.0-pdf"></script>
+  </body>
 </html>
