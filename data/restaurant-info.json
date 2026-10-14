@@ -10,10 +10,31 @@
   },
   "contact": {
     "phone": "(84) 98669-4702",
-    "phoneSecondary": "(84) 98620-5442",
     "whatsapp": "5584986694702",
-    "whatsappSecondary": "5584986205442",
     "instagram": "@deliciasburgerszonanorte"
+  },
+  "ordering": {
+    "paymentMethods": [
+      { "key": "pix", "label": "PIX" },
+      { "key": "dinheiro", "label": "Dinheiro" },
+      { "key": "credito", "label": "Cartão de crédito" },
+      { "key": "debito", "label": "Cartão de débito" }
+    ],
+    "extras": [
+      { "id": "ovo", "name": "Ovo" },
+      { "id": "bacon", "name": "Bacon" },
+      { "id": "salsicha", "name": "Salsicha" },
+      { "id": "presunto", "name": "Presunto" },
+      { "id": "queijo-cheddar", "name": "Queijo cheddar" },
+      { "id": "queijo-coalho", "name": "Queijo coalho" },
+      { "id": "catupiry", "name": "Catupiry" },
+      { "id": "calabresa", "name": "Calabresa" },
+      { "id": "frango", "name": "Frango" },
+      { "id": "carne-de-sol", "name": "Carne de sol" },
+      { "id": "camarao", "name": "Camarão" }
+    ],
+    "pricedExtraId": "adicional-batata-frita",
+    "extrasNote": "Adicionais sem preço no cardápio: a loja confirma o valor no WhatsApp."
   },
   "wifi": {
     "ssid": "Delicias Burgers",
@@ -38,8 +59,8 @@
   },
   "meta": {
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
-    "lastUpdated": "2026-09-15",
-    "version": "0.5.0-pdf",
+    "lastUpdated": "2026-10-14",
+    "version": "0.7.0-carrinho",
     "g1Approved": true
   }
 }

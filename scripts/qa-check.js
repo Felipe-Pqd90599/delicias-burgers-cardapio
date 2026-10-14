@@ -67,6 +67,19 @@ ok(`${catFiles.length} fotos de categoria em assets/categorias/`);
 ok(`images-meta missingCount ${meta.missingCount}`);
 ok(`${items.length} itens em ${menu.categories.length} categorias`);
 
+const info = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/restaurant-info.json'), 'utf8'));
+if (info.contact?.whatsappSecondary || info.contact?.phoneSecondary) {
+  err('ainda há telefone secundário — a loja usa só o 4702');
+}
+if (!String(info.contact?.whatsapp || '').endsWith('986694702')) {
+  err('WhatsApp da loja deve ser o número 4702');
+}
+if (!info.ordering?.paymentMethods?.length) {
+  err('ordering.paymentMethods ausente em restaurant-info.json');
+} else {
+  ok(`pedido: 1 WhatsApp · ${info.ordering.paymentMethods.length} pagamentos`);
+}
+
 const onlinePdf = path.join(ROOT, 'online/cardapio-delicias-burgers.pdf');
 if (!fs.existsSync(onlinePdf)) {
   warn('online/cardapio-delicias-burgers.pdf não encontrado — rode npm run generate-pdf');

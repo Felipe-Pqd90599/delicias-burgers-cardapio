@@ -1,5 +1,18 @@
 # Changelog — Menu Content
 
+## 2026-10-14 — Carrinho antes do WhatsApp
+
+- Itens vão para o **carrinho** (com tirar / adicionais / observação / quantidade).
+- Pagamento e envio no WhatsApp só na finalização do carrinho, com o pedido completo.
+- Sem preço novo: totais usam o JSON; adicionais sem preço continuam “confirmar valor”.
+
+## 2026-10-13 — Pedido no WhatsApp + um único número
+
+- WhatsApp da loja **somente (84) 98669-4702**. O 5442 saiu do JSON e do site.
+- Bloco `ordering` em `restaurant-info.json`: PIX, dinheiro, crédito e débito.
+- Adicionais sugeridos = ingredientes que já existem no cardápio (ovo, bacon, cheddar, catupiry…). **Sem preço inventado**; a loja confirma no WhatsApp.
+- Extra com preço oficial: **Adicional de batata frita** P/M/G (já estava no JSON).
+
 ## 2026-09-15 — Rodízio como carro-chefe
 
 - Categoria **Rodízio** no topo, fora da lista de pizzas à la carte

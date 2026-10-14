@@ -27,6 +27,28 @@
 - Preço sempre amarelo; fundo preto
 - Pizzas: mostrar G e GG no mesmo card
 - Artesanais: faixa com a nota “acompanha batata frita”
+- **Um WhatsApp** no hero, no rodapé e no pedido — número 4702
+
+## Modal de pedido (mobile-first)
+
+Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card centralizado.
+
+1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio)
+2. **Tirar** — chips dos ingredientes do JSON
+3. **Adicionais** — chips oficiais + batata frita P/M/G
+4. **Observação** e **quantidade**
+5. Preço da linha e **Adicionar ao carrinho** (não abre WhatsApp)
+
+## Carrinho
+
+- Botão flutuante no canto inferior direito, com contagem
+- Painel no mesmo padrão do modal
+- Cada linha: nome, alterações, preço, quantidade, remover
+- **Pagamento** só aqui
+- **Enviar pedido no WhatsApp** com o pedido inteiro (desabilitado até haver pagamento e pelo menos 1 item)
+- “Continuar escolhendo” fecha o painel e volta ao cardápio
+
+Não pedir dois números. Não enviar WhatsApp no clique do item.
 
 ## Não fazer
 

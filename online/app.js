@@ -1,8 +1,29 @@
+const EXTRA_CATS = new Set([
+  "sanduiches",
+  "sanduiches-artesanais",
+  "pizzas",
+  "pasteis",
+  "petiscos",
+  "combos",
+]);
+
+const REMOVE_CATS = new Set([...EXTRA_CATS, "rodizio"]);
+const CART_KEY = "delicias-cart-v1";
+
 const state = {
   menu: null,
   info: null,
   modalItem: null,
+  modalCategory: null,
   modalPortion: null,
+  modalRemoved: [],
+  modalExtras: [],
+  modalFries: null,
+  modalComment: "",
+  modalQty: 1,
+  cart: [],
+  cartPay: null,
+  toastTimer: null,
 };
 
 function formatPrice(value) {
@@ -36,6 +57,31 @@ function mapsUrl(info) {
     `${info.location?.address || ""}, ${info.location?.neighborhood || ""}, ${info.location?.city || ""}-${info.location?.state || ""}`
   );
   return `https://maps.google.com/?q=${q}`;
+}
+
+function shopPhone(info) {
+  return info?.contact?.whatsapp || "";
+}
+
+function paymentMethods() {
+  return state.info?.ordering?.paymentMethods || [];
+}
+
+function suggestedExtras() {
+  return state.info?.ordering?.extras || [];
+}
+
+function friesItem() {
+  const id = state.info?.ordering?.pricedExtraId;
+  return id ? findItem(id)?.item : null;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function priceLines(item) {
@@ -72,14 +118,111 @@ function portionLabel(item, portionKey) {
   return item.priceLabel || "";
 }
 
-function orderText(item, portionKey) {
-  const extra = portionLabel(item, portionKey);
-  const size = extra ? ` (${extra})` : "";
-  return `Olá, quero pedir *${item.name}*${size} — ${formatPrice(currentPrice(item, portionKey))}`;
+function parseIngredients(description) {
+  if (!description) return [];
+  return description
+    .split(/,|\s\+\s|\se\s/)
+    .map((part) => part.replace(/\.$/, "").trim())
+    .filter((part) => part.length > 1 && !/^consultar/i.test(part));
 }
 
-function phones(info) {
-  return [info.contact?.whatsapp, info.contact?.whatsappSecondary].filter(Boolean);
+function friesPriceFor(key) {
+  const fries = friesItem();
+  if (!fries || !key) return 0;
+  return currentPrice(fries, key) || 0;
+}
+
+function lineUnitPrice(line) {
+  return Number(line.unitPrice) || 0;
+}
+
+function lineTotal(line) {
+  return lineUnitPrice(line) * (line.qty || 1);
+}
+
+function cartCount() {
+  return state.cart.reduce((sum, line) => sum + (line.qty || 0), 0);
+}
+
+function cartTotal() {
+  return state.cart.reduce((sum, line) => sum + lineTotal(line), 0);
+}
+
+function extraAlreadyInItem(item, extraName) {
+  return (item.description || "").toLowerCase().includes(extraName.toLowerCase());
+}
+
+function lineKey(line) {
+  return JSON.stringify({
+    itemId: line.itemId,
+    portionKey: line.portionKey,
+    fries: line.fries,
+    removed: [...(line.removed || [])].sort(),
+    extras: [...(line.extras || [])].sort(),
+    comment: line.comment || "",
+  });
+}
+
+function loadCart() {
+  try {
+    const raw = sessionStorage.getItem(CART_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    state.cart = Array.isArray(parsed) ? parsed : [];
+  } catch {
+    state.cart = [];
+  }
+}
+
+function saveCart() {
+  sessionStorage.setItem(CART_KEY, JSON.stringify(state.cart));
+}
+
+function lockBody() {
+  const modalOpen = !document.getElementById("modal").hidden;
+  const cartOpen = !document.getElementById("cart").hidden;
+  document.body.style.overflow = modalOpen || cartOpen ? "hidden" : "";
+}
+
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.textContent = text;
+  toast.hidden = false;
+  clearTimeout(state.toastTimer);
+  state.toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, 1800);
+}
+
+function buildCartMessage() {
+  const lines = ["Olá, vim pelo cardápio da *Delícias Burgers*.", "", "*Pedido:*"];
+  state.cart.forEach((line, index) => {
+    const size = line.portionLabel ? ` (${line.portionLabel})` : "";
+    lines.push(
+      `${index + 1}. ${line.qty}x ${line.name}${size} — ${formatPrice(lineTotal(line))}`
+    );
+    if (line.removed?.length) {
+      lines.push(`   Tirar: ${line.removed.join(", ")}`);
+    }
+    const extras = [];
+    if (line.fries) {
+      extras.push(`batata frita ${line.fries} ${formatPrice(line.friesPrice || 0)}`);
+    }
+    (line.extras || []).forEach((name) => extras.push(`${name} (confirmar valor)`));
+    if (extras.length) {
+      lines.push(`   Adicionais: ${extras.join("; ")}`);
+    }
+    if (line.comment) {
+      lines.push(`   Obs.: ${line.comment}`);
+    }
+  });
+  lines.push("", `*Total (cardápio):* ${formatPrice(cartTotal())}`);
+  const pay = paymentMethods().find((p) => p.key === state.cartPay);
+  lines.push(`*Pagamento:* ${pay ? pay.label : "não informado"}`);
+  if (state.cart.some((line) => line.extras?.length)) {
+    lines.push("", "Há adicionais sem preço no cardápio para a loja confirmar.");
+  }
+  lines.push("", "Por favor, confirmem o pedido e o valor final.");
+  return lines.join("\n");
 }
 
 function renderHero(info) {
@@ -89,12 +232,10 @@ function renderHero(info) {
 
   const actions = document.getElementById("hero-actions");
   const ig = info.contact?.instagram || "";
-  actions.innerHTML = phones(info)
-    .map(
-      (phone) =>
-        `<a class="btn btn--wa" href="${waLink(phone)}" target="_blank" rel="noopener">WhatsApp ${formatPhone(phone)}</a>`
-    )
-    .join("");
+  const phone = shopPhone(info);
+  actions.innerHTML = phone
+    ? `<a class="btn btn--wa" href="${waLink(phone)}" target="_blank" rel="noopener">WhatsApp ${formatPhone(phone)}</a>`
+    : "";
   if (ig) {
     actions.insertAdjacentHTML(
       "beforeend",
@@ -186,21 +327,32 @@ function renderMenu(menu) {
 function findItem(id) {
   for (const cat of state.menu.categories) {
     const item = (cat.items || []).find((i) => i.id === id);
-    if (item) return item;
+    if (item) return { item, category: cat };
   }
   return null;
 }
 
 function openModal(id) {
-  const item = findItem(id);
-  if (!item) return;
-  state.modalItem = item;
-  state.modalPortion = item.portionOptions?.[0]?.key || "primary";
-  document.getElementById("modal-title").textContent = item.name;
-  document.getElementById("modal-desc").textContent = item.description || "";
-  renderPortions(item);
+  const found = findItem(id);
+  if (!found) return;
+  state.modalItem = found.item;
+  state.modalCategory = found.category;
+  state.modalPortion = found.item.portionOptions?.[0]?.key || "primary";
+  state.modalRemoved = [];
+  state.modalExtras = [];
+  state.modalFries = null;
+  state.modalComment = "";
+  state.modalQty = 1;
+  document.getElementById("modal-title").textContent = found.item.name;
+  document.getElementById("modal-desc").textContent = found.item.description || "";
+  document.getElementById("modal-comment").value = "";
+  renderPortions(found.item);
+  renderRemove(found.item, found.category);
+  renderExtras(found.item, found.category);
+  renderQty();
   renderModalPrice();
   document.getElementById("modal").hidden = false;
+  lockBody();
 }
 
 function renderPortions(item) {
@@ -227,39 +379,302 @@ function renderPortions(item) {
   });
 }
 
+function renderRemove(item, category) {
+  const box = document.getElementById("modal-remove");
+  const ingredients = parseIngredients(item.description);
+  if (!REMOVE_CATS.has(category?.id) || ingredients.length < 2) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  box.innerHTML = `
+    <span class="modal__label">Tirar do pedido</span>
+    <p class="modal__help">Toque no que não quer no lanche</p>
+    <div class="modal__chips">
+      ${ingredients
+        .map((ing) => {
+          const off = state.modalRemoved.includes(ing);
+          return `<button type="button" class="modal__chip${off ? " is-off" : ""}" data-ing="${escapeHtml(ing)}" aria-pressed="${off}">${escapeHtml(ing)}</button>`;
+        })
+        .join("")}
+    </div>`;
+  box.querySelectorAll("[data-ing]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.ing;
+      if (state.modalRemoved.includes(name)) {
+        state.modalRemoved = state.modalRemoved.filter((x) => x !== name);
+      } else {
+        state.modalRemoved = [...state.modalRemoved, name];
+      }
+      renderRemove(item, category);
+    });
+  });
+}
+
+function renderExtras(item, category) {
+  const box = document.getElementById("modal-extras");
+  const fries = friesItem();
+  const showFries = Boolean(fries) && item.id !== fries.id;
+  const extras = suggestedExtras().filter((extra) => !extraAlreadyInItem(item, extra.name));
+  if (!EXTRA_CATS.has(category?.id) || (!showFries && extras.length === 0)) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  const friesHtml =
+    showFries && fries.portionOptions
+      ? `<p class="modal__help">Batata frita (preço do cardápio)</p>
+         <div class="modal__portions" id="modal-fries">
+           ${fries.portionOptions
+             .map(
+               (opt) =>
+                 `<button type="button" data-fries="${opt.key}" class="${opt.key === state.modalFries ? "is-on" : ""}">${opt.label} ${formatPrice(opt.price)}</button>`
+             )
+             .join("")}
+         </div>`
+      : "";
+  const extraHtml = extras.length
+    ? `<p class="modal__help">Quer acrescentar algo? ${state.info.ordering?.extrasNote || ""}</p>
+       <div class="modal__chips">
+         ${extras
+           .map((extra) => {
+             const on = state.modalExtras.includes(extra.name);
+             return `<button type="button" class="modal__chip${on ? " is-on" : ""}" data-extra="${escapeHtml(extra.name)}" aria-pressed="${on}">${escapeHtml(extra.name)}</button>`;
+           })
+           .join("")}
+       </div>`
+    : "";
+  box.innerHTML = `<span class="modal__label">Adicionais</span>${friesHtml}${extraHtml}`;
+  box.querySelectorAll("[data-fries]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.modalFries = state.modalFries === btn.dataset.fries ? null : btn.dataset.fries;
+      renderExtras(item, category);
+      renderModalPrice();
+    });
+  });
+  box.querySelectorAll("[data-extra]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.extra;
+      if (state.modalExtras.includes(name)) {
+        state.modalExtras = state.modalExtras.filter((x) => x !== name);
+      } else {
+        state.modalExtras = [...state.modalExtras, name];
+      }
+      renderExtras(item, category);
+      renderModalPrice();
+    });
+  });
+}
+
+function renderQty() {
+  const box = document.getElementById("modal-qty-box");
+  box.innerHTML = `
+    <span class="modal__label">Quantidade</span>
+    <div class="modal__qty">
+      <button class="qty-btn" type="button" data-delta="-1" aria-label="Diminuir">−</button>
+      <span class="qty-value">${state.modalQty}</span>
+      <button class="qty-btn" type="button" data-delta="1" aria-label="Aumentar">+</button>
+    </div>`;
+  box.querySelectorAll("[data-delta]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = state.modalQty + Number(btn.dataset.delta);
+      state.modalQty = Math.min(20, Math.max(1, next));
+      renderQty();
+      renderModalPrice();
+    });
+  });
+}
+
+function modalUnitPrice() {
+  if (!state.modalItem) return 0;
+  return currentPrice(state.modalItem, state.modalPortion) + friesPriceFor(state.modalFries);
+}
+
 function renderModalPrice() {
+  const qty = state.modalQty || 1;
+  document.getElementById("modal-price").textContent = formatPrice(modalUnitPrice() * qty);
+  const hint = document.getElementById("modal-hint");
+  hint.textContent = state.modalExtras.length
+    ? "A loja confirma no WhatsApp o valor dos adicionais sem preço no cardápio."
+    : "O item vai para o carrinho. Você pode pedir mais coisas antes de enviar.";
+  document.getElementById("modal-wa").innerHTML =
+    `<button class="btn btn--gold" type="button" id="add-to-cart">Adicionar ao carrinho</button>`;
+  document.getElementById("add-to-cart").addEventListener("click", addCurrentToCart);
+}
+
+function addCurrentToCart() {
   const item = state.modalItem;
-  const price = currentPrice(item, state.modalPortion);
-  document.getElementById("modal-price").textContent = formatPrice(price);
-  const text = orderText(item, state.modalPortion);
-  document.getElementById("modal-wa").innerHTML = phones(state.info)
-    .map(
-      (phone) =>
-        `<a class="btn btn--wa" href="${waLink(phone, text)}" target="_blank" rel="noopener">Pedir no ${formatPhone(phone)}</a>`
-    )
-    .join("");
+  if (!item) return;
+  const fries = friesItem();
+  const friesOpt = fries?.portionOptions?.find((opt) => opt.key === state.modalFries);
+  const line = {
+    itemId: item.id,
+    name: item.name,
+    portionKey: state.modalPortion,
+    portionLabel: portionLabel(item, state.modalPortion),
+    qty: state.modalQty || 1,
+    removed: [...state.modalRemoved],
+    extras: [...state.modalExtras],
+    fries: state.modalFries,
+    friesPrice: friesPriceFor(state.modalFries),
+    friesLabel: friesOpt ? friesOpt.label : "",
+    comment: state.modalComment.trim(),
+    unitPrice: modalUnitPrice(),
+  };
+  const key = lineKey(line);
+  const existing = state.cart.find((row) => lineKey(row) === key);
+  if (existing) {
+    existing.qty = Math.min(20, existing.qty + line.qty);
+  } else {
+    state.cart.push(line);
+  }
+  saveCart();
+  renderCart();
+  closeModal();
+  showToast("Adicionado ao carrinho");
 }
 
 function closeModal() {
   document.getElementById("modal").hidden = true;
   state.modalItem = null;
+  state.modalCategory = null;
+  lockBody();
+}
+
+function openCart() {
+  document.getElementById("cart").hidden = false;
+  renderCart();
+  lockBody();
+}
+
+function closeCart() {
+  document.getElementById("cart").hidden = true;
+  lockBody();
+}
+
+function renderCartFab() {
+  document.getElementById("cart-count").textContent = String(cartCount());
+}
+
+function renderCartPay() {
+  const box = document.getElementById("cart-pay");
+  if (!state.cart.length) {
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML = `
+    <span class="modal__label">Pagamento</span>
+    <p class="modal__help">Escolha como vai pagar o pedido inteiro</p>
+    <div class="modal__portions">
+      ${paymentMethods()
+        .map(
+          (method) =>
+            `<button type="button" data-pay="${method.key}" class="${method.key === state.cartPay ? "is-on" : ""}">${method.label}</button>`
+        )
+        .join("")}
+    </div>`;
+  box.querySelectorAll("[data-pay]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.cartPay = btn.dataset.pay;
+      renderCart();
+    });
+  });
+}
+
+function renderCart() {
+  renderCartFab();
+  const list = document.getElementById("cart-list");
+  if (!state.cart.length) {
+    list.innerHTML = `<p class="cart-empty">Seu carrinho está vazio. Escolha no cardápio.</p>`;
+  } else {
+    list.innerHTML = state.cart
+      .map((line, index) => {
+        const size = line.portionLabel ? ` · ${escapeHtml(line.portionLabel)}` : "";
+        const bits = [];
+        if (line.removed?.length) bits.push(`Tirar: ${escapeHtml(line.removed.join(", "))}`);
+        const extras = [];
+        if (line.fries) extras.push(`batata frita ${escapeHtml(line.fries)}`);
+        (line.extras || []).forEach((name) => extras.push(escapeHtml(name)));
+        if (extras.length) bits.push(`Adicionais: ${extras.join(", ")}`);
+        if (line.comment) bits.push(`Obs.: ${escapeHtml(line.comment)}`);
+        return `<article class="cart-line">
+          <div>
+            <p class="cart-line__name">${escapeHtml(line.name)}${size}</p>
+            ${bits.length ? `<p class="cart-line__meta">${bits.join(" · ")}</p>` : ""}
+          </div>
+          <p class="cart-line__price">${formatPrice(lineTotal(line))}</p>
+          <div class="cart-line__tools">
+            <button class="qty-btn" type="button" data-line-qty="${index}" data-delta="-1" aria-label="Diminuir">−</button>
+            <span class="qty-value">${line.qty}</span>
+            <button class="qty-btn" type="button" data-line-qty="${index}" data-delta="1" aria-label="Aumentar">+</button>
+            <button class="cart-remove" type="button" data-remove="${index}">Remover</button>
+          </div>
+        </article>`;
+      })
+      .join("");
+    list.querySelectorAll("[data-line-qty]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const index = Number(btn.dataset.lineQty);
+        const line = state.cart[index];
+        if (!line) return;
+        line.qty = Math.min(20, Math.max(0, line.qty + Number(btn.dataset.delta)));
+        if (line.qty === 0) state.cart.splice(index, 1);
+        saveCart();
+        renderCart();
+      });
+    });
+    list.querySelectorAll("[data-remove]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.cart.splice(Number(btn.dataset.remove), 1);
+        saveCart();
+        renderCart();
+      });
+    });
+  }
+
+  renderCartPay();
+  const totalEl = document.getElementById("cart-total");
+  const hint = document.getElementById("cart-hint");
+  const actions = document.getElementById("cart-actions");
+  const phone = shopPhone(state.info);
+  const ready = Boolean(state.cart.length && state.cartPay && phone);
+
+  if (!state.cart.length) {
+    totalEl.textContent = "";
+    hint.textContent = "";
+    actions.innerHTML = `<button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
+  } else {
+    totalEl.textContent = formatPrice(cartTotal());
+    hint.textContent = ready
+      ? "A mensagem vai com todos os itens do carrinho."
+      : "Escolha a forma de pagamento para enviar o pedido.";
+    const href = ready ? waLink(phone, buildCartMessage()) : "#";
+    actions.innerHTML = `
+      <a class="btn btn--wa${ready ? "" : " is-disabled"}" href="${href}" target="_blank" rel="noopener" ${ready ? "" : 'aria-disabled="true"'}>Enviar pedido no WhatsApp</a>
+      <button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
+    actions.querySelector("a").addEventListener("click", (event) => {
+      if (!ready) event.preventDefault();
+    });
+  }
 }
 
 function renderFooter(info) {
   const loc = info.location || {};
   const ig = info.contact?.instagram || "";
+  const phone = shopPhone(info);
   const promo = (info.policies?.birthdayRodizio || []).map((t) => `<p>${t}</p>`).join("");
   document.getElementById("footer").innerHTML = `
     <p><strong>${info.name}</strong></p>
     <p><a href="${mapsUrl(info)}" target="_blank" rel="noopener">${loc.address}</a></p>
     <p>${loc.neighborhood}, ${loc.city}-${loc.state}</p>
     <div class="footer__wa">
-      ${phones(info)
-        .map(
-          (phone) =>
-            `<a class="btn btn--wa" href="${waLink(phone)}" target="_blank" rel="noopener">${formatPhone(phone)}</a>`
-        )
-        .join("")}
+      ${
+        phone
+          ? `<a class="btn btn--wa" href="${waLink(phone)}" target="_blank" rel="noopener">${formatPhone(phone)}</a>`
+          : ""
+      }
     </div>
     <p><a href="${instagramUrl(ig)}" target="_blank" rel="noopener">${ig}</a></p>
     <p>Rodízio das 18h às 23:30 · ${info.hours?.rodizioWeekday || ""} · ${info.hours?.rodizioWeekend || ""}</p>
@@ -291,19 +706,30 @@ async function boot() {
   ]);
   state.menu = menu;
   state.info = info;
+  loadCart();
   renderHero(info);
   renderFeatured(menu);
   renderWifi(info);
   renderNav(menu);
   renderMenu(menu);
   renderFooter(info);
+  renderCart();
   watchNav();
 
   document.getElementById("modal").addEventListener("click", (event) => {
     if (event.target.dataset.close !== undefined) closeModal();
   });
+  document.getElementById("cart").addEventListener("click", (event) => {
+    if (event.target.closest("[data-cart-close]")) closeCart();
+  });
+  document.getElementById("cart-fab").addEventListener("click", openCart);
+  document.getElementById("modal-comment").addEventListener("input", (event) => {
+    state.modalComment = event.target.value;
+  });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeModal();
+    if (event.key !== "Escape") return;
+    if (!document.getElementById("cart").hidden) closeCart();
+    else closeModal();
   });
 }
 
