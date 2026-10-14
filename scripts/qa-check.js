@@ -58,6 +58,18 @@ for (const item of items) {
   } else if (typeof item.price !== 'number') {
     err(`${item.id}: price inválido`);
   }
+  if (item.flavorOptions) {
+    if (!Array.isArray(item.flavorOptions) || item.flavorOptions.length === 0) {
+      err(`${item.id}: flavorOptions vazio`);
+    }
+  }
+  if (item.toppingOptions) {
+    if (!Array.isArray(item.toppingOptions) || item.toppingOptions.length === 0) {
+      err(`${item.id}: toppingOptions vazio`);
+    }
+    const limit = Number(item.toppingLimit) || 0;
+    if (limit < 1) err(`${item.id}: toppingLimit inválido`);
+  }
 }
 
 const catFiles = fs.existsSync(catDir)

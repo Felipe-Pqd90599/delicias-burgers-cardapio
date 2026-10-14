@@ -1,5 +1,15 @@
 # Changelog — Menu Content
 
+## 2026-10-14 — Acompanhamentos do açaí
+
+Lista do Felipe (máximo 4): leite condensado, leite em pó, granola, cobertura de morango, cobertura de chocolate, ovomaltine, confete, granulado de chocolate, coco ralado, amendoim triturado, banana e abacaxi.
+
+## 2026-10-14 — Sabores no pedido (pizza, milk shake, suco)
+
+- Pizza no WhatsApp/carrinho: **Pizza de {sabor} G/GG** (ex.: Pizza de Frango G).
+- Milk shake: Chocolate, Morango, Ovomaltine (Felipe).
+- Suco e suco ao leite: Abacaxi, Acerola, Cajá, Caju, Uva, Morango, Goiaba, Manga, Mangaba, Graviola (Felipe).
+
 ## 2026-10-14 — Preços dos adicionais
 
 Felipe aprovou a tabela sugerida a partir das diferenças do cardápio oficial:

@@ -33,7 +33,7 @@
 
 Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card centralizado.
 
-1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio)
+1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio) + sabor (milk shake / sucos) + acompanhamentos do açaí (máx. 4)
 2. **Tirar** — chips dos ingredientes do JSON
 3. **Adicionais** — chips oficiais com preço + batata frita P/M/G
 4. **Observação** e **quantidade**

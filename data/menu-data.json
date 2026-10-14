@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "0.7.1-adicionais",
+    "version": "0.7.3-acai",
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "currency": "BRL",
     "extractedAt": "2026-09-15",
@@ -759,28 +759,53 @@
           "id": "milk-shake-400ml",
           "name": "Milk shake 400ml",
           "price": 14,
-          "description": "Consultar sabores",
-          "image": "milk-shake-400ml.jpg"
+          "description": "Chocolate, morango ou ovomaltine",
+          "image": "milk-shake-400ml.jpg",
+          "flavorOptions": ["Chocolate", "Morango", "Ovomaltine"]
         },
         {
           "id": "suco",
           "name": "Suco",
-          "description": "Consultar sabores",
+          "description": "Abacaxi, acerola, cajá, caju, uva, morango, goiaba, manga, mangaba ou graviola",
           "image": "suco.jpg",
           "price": 7,
           "priceLabel": "400ml",
           "priceSecondary": 17,
-          "priceSecondaryLabel": "jarra 1L"
+          "priceSecondaryLabel": "jarra 1L",
+          "flavorOptions": [
+            "Abacaxi",
+            "Acerola",
+            "Cajá",
+            "Caju",
+            "Uva",
+            "Morango",
+            "Goiaba",
+            "Manga",
+            "Mangaba",
+            "Graviola"
+          ]
         },
         {
           "id": "suco-ao-leite",
           "name": "Suco ao leite",
-          "description": "Consultar sabores",
+          "description": "Abacaxi, acerola, cajá, caju, uva, morango, goiaba, manga, mangaba ou graviola",
           "image": "suco-ao-leite.jpg",
           "price": 8,
           "priceLabel": "400ml",
           "priceSecondary": 18,
-          "priceSecondaryLabel": "jarra 1L"
+          "priceSecondaryLabel": "jarra 1L",
+          "flavorOptions": [
+            "Abacaxi",
+            "Acerola",
+            "Cajá",
+            "Caju",
+            "Uva",
+            "Morango",
+            "Goiaba",
+            "Manga",
+            "Mangaba",
+            "Graviola"
+          ]
         },
         {
           "id": "suco-laranja-limao",
@@ -802,12 +827,27 @@
         {
           "id": "acai",
           "name": "Açaí",
-          "description": "+ 4 acompanhamentos",
+          "description": "Até 4 acompanhamentos",
           "image": "acai.jpg",
           "portionOptions": [
             { "key": "200ml", "label": "200 ml", "price": 8 },
             { "key": "300ml", "label": "300 ml", "price": 12 },
             { "key": "500ml", "label": "500 ml", "price": 18 }
+          ],
+          "toppingLimit": 4,
+          "toppingOptions": [
+            "Leite condensado",
+            "Leite em pó",
+            "Granola",
+            "Cobertura de morango",
+            "Cobertura de chocolate",
+            "Ovomaltine",
+            "Confete",
+            "Granulado de chocolate",
+            "Coco ralado",
+            "Amendoim triturado",
+            "Banana",
+            "Abacaxi"
           ]
         },
         {
