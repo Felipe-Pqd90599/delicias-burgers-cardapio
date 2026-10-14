@@ -19,6 +19,8 @@ const state = {
   modalRemoved: [],
   modalExtras: [],
   modalFries: null,
+  modalFlavor: "",
+  modalToppings: [],
   modalComment: "",
   modalQty: 1,
   cart: [],
@@ -171,11 +173,43 @@ function extraAlreadyInItem(item, extraName) {
   return (item.description || "").toLowerCase().includes(extraName.toLowerCase());
 }
 
+function flavorOptions(item) {
+  return item?.flavorOptions || [];
+}
+
+function needsFlavor(item) {
+  return flavorOptions(item).length > 0;
+}
+
+function toppingOptions(item) {
+  return item?.toppingOptions || [];
+}
+
+function toppingLimit(item) {
+  return Number(item?.toppingLimit) || 4;
+}
+
+function displayLineName(line) {
+  const cat = line.categoryId || findItem(line.itemId)?.category?.id;
+  const size = line.portionLabel || "";
+  if (cat === "pizzas") {
+    const pizza = /^pizza\s/i.test(line.name) ? line.name : `Pizza de ${line.name}`;
+    return size ? `${pizza} ${size}` : pizza;
+  }
+  const flavor = line.flavor ? ` de ${line.flavor}` : "";
+  if (/milk/i.test(line.name)) {
+    return `${line.name}${flavor}`;
+  }
+  return size ? `${line.name}${flavor} ${size}` : `${line.name}${flavor}`;
+}
+
 function lineKey(line) {
   return JSON.stringify({
     itemId: line.itemId,
     portionKey: line.portionKey,
     fries: line.fries,
+    flavor: line.flavor || "",
+    toppings: [...(line.toppings || [])].sort(),
     removed: [...(line.removed || [])].sort(),
     extras: [...(line.extras || [])].sort(),
     comment: line.comment || "",
@@ -215,9 +249,8 @@ function showToast(text) {
 function buildCartMessage() {
   const lines = ["Olá, vim pelo cardápio da *Delícias Burgers*.", "", "*Pedido:*"];
   state.cart.forEach((line, index) => {
-    const size = line.portionLabel ? ` (${line.portionLabel})` : "";
     lines.push(
-      `${index + 1}. ${line.qty}x ${line.name}${size} — ${formatPrice(lineTotal(line))}`
+      `${index + 1}. ${line.qty}x ${displayLineName(line)} — ${formatPrice(lineTotal(line))}`
     );
     if (line.removed?.length) {
       lines.push(`   Tirar: ${line.removed.join(", ")}`);
@@ -229,6 +262,9 @@ function buildCartMessage() {
     (line.extras || []).forEach((name) => extras.push(formatExtra(name)));
     if (extras.length) {
       lines.push(`   Adicionais: ${extras.join("; ")}`);
+    }
+    if (line.toppings?.length) {
+      lines.push(`   Acompanhamentos: ${line.toppings.join(", ")}`);
     }
     if (line.comment) {
       lines.push(`   Obs.: ${line.comment}`);
@@ -357,12 +393,16 @@ function openModal(id) {
   state.modalRemoved = [];
   state.modalExtras = [];
   state.modalFries = null;
+  state.modalFlavor = "";
+  state.modalToppings = [];
   state.modalComment = "";
   state.modalQty = 1;
   document.getElementById("modal-title").textContent = found.item.name;
   document.getElementById("modal-desc").textContent = found.item.description || "";
   document.getElementById("modal-comment").value = "";
   renderPortions(found.item);
+  renderFlavors(found.item);
+  renderToppings(found.item);
   renderRemove(found.item, found.category);
   renderExtras(found.item, found.category);
   renderQty();
@@ -391,6 +431,73 @@ function renderPortions(item) {
       state.modalPortion = btn.dataset.key;
       renderPortions(item);
       renderModalPrice();
+    });
+  });
+}
+
+function renderFlavors(item) {
+  const box = document.getElementById("modal-flavors");
+  const options = flavorOptions(item);
+  if (!options.length) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  box.innerHTML = `
+    <span class="modal__label">Sabor</span>
+    <p class="modal__help">Escolha o sabor do pedido</p>
+    <div class="modal__chips">
+      ${options
+        .map((flavor) => {
+          const on = state.modalFlavor === flavor;
+          return `<button type="button" class="modal__chip${on ? " is-on" : ""}" data-flavor="${escapeHtml(flavor)}" aria-pressed="${on}">${escapeHtml(flavor)}</button>`;
+        })
+        .join("")}
+    </div>`;
+  box.querySelectorAll("[data-flavor]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.modalFlavor = btn.dataset.flavor;
+      renderFlavors(item);
+      renderModalPrice();
+    });
+  });
+}
+
+function renderToppings(item) {
+  const box = document.getElementById("modal-toppings");
+  const options = toppingOptions(item);
+  if (!options.length) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  const limit = toppingLimit(item);
+  const picked = state.modalToppings.length;
+  box.hidden = false;
+  box.innerHTML = `
+    <span class="modal__label">Acompanhamentos</span>
+    <p class="modal__help">Escolha até ${limit} (${picked} de ${limit})</p>
+    <div class="modal__chips">
+      ${options
+        .map((name) => {
+          const on = state.modalToppings.includes(name);
+          return `<button type="button" class="modal__chip${on ? " is-on" : ""}" data-topping="${escapeHtml(name)}" aria-pressed="${on}">${escapeHtml(name)}</button>`;
+        })
+        .join("")}
+    </div>`;
+  box.querySelectorAll("[data-topping]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const name = btn.dataset.topping;
+      if (state.modalToppings.includes(name)) {
+        state.modalToppings = state.modalToppings.filter((x) => x !== name);
+      } else if (state.modalToppings.length >= limit) {
+        showToast(`No máximo ${limit} acompanhamentos`);
+        return;
+      } else {
+        state.modalToppings = [...state.modalToppings, name];
+      }
+      renderToppings(item);
     });
   });
 }
@@ -512,7 +619,10 @@ function renderModalPrice() {
   const qty = state.modalQty || 1;
   document.getElementById("modal-price").textContent = formatPrice(modalUnitPrice() * qty);
   const hint = document.getElementById("modal-hint");
-  hint.textContent = "O item vai para o carrinho. Você pode pedir mais coisas antes de enviar.";
+  hint.textContent =
+    needsFlavor(state.modalItem) && !state.modalFlavor
+      ? "Escolha o sabor para adicionar ao carrinho."
+      : "O item vai para o carrinho. Você pode pedir mais coisas antes de enviar.";
   document.getElementById("modal-wa").innerHTML =
     `<button class="btn btn--gold" type="button" id="add-to-cart">Adicionar ao carrinho</button>`;
   document.getElementById("add-to-cart").addEventListener("click", addCurrentToCart);
@@ -521,13 +631,20 @@ function renderModalPrice() {
 function addCurrentToCart() {
   const item = state.modalItem;
   if (!item) return;
+  if (needsFlavor(item) && !state.modalFlavor) {
+    showToast("Escolha o sabor");
+    return;
+  }
   const fries = friesItem();
   const friesOpt = fries?.portionOptions?.find((opt) => opt.key === state.modalFries);
   const line = {
     itemId: item.id,
     name: item.name,
+    categoryId: state.modalCategory?.id || "",
     portionKey: state.modalPortion,
     portionLabel: portionLabel(item, state.modalPortion),
+    flavor: state.modalFlavor || "",
+    toppings: [...state.modalToppings],
     qty: state.modalQty || 1,
     removed: [...state.modalRemoved],
     extras: [...state.modalExtras],
@@ -605,17 +722,19 @@ function renderCart() {
   } else {
     list.innerHTML = state.cart
       .map((line, index) => {
-        const size = line.portionLabel ? ` · ${escapeHtml(line.portionLabel)}` : "";
         const bits = [];
         if (line.removed?.length) bits.push(`Tirar: ${escapeHtml(line.removed.join(", "))}`);
         const extras = [];
         if (line.fries) extras.push(`batata frita ${escapeHtml(line.fries)}`);
         (line.extras || []).forEach((name) => extras.push(escapeHtml(formatExtra(name))));
         if (extras.length) bits.push(`Adicionais: ${extras.join(", ")}`);
+        if (line.toppings?.length) {
+          bits.push(`Acompanhamentos: ${escapeHtml(line.toppings.join(", "))}`);
+        }
         if (line.comment) bits.push(`Obs.: ${escapeHtml(line.comment)}`);
         return `<article class="cart-line">
           <div>
-            <p class="cart-line__name">${escapeHtml(line.name)}${size}</p>
+            <p class="cart-line__name">${escapeHtml(displayLineName(line))}</p>
             ${bits.length ? `<p class="cart-line__meta">${bits.join(" · ")}</p>` : ""}
           </div>
           <p class="cart-line__price">${formatPrice(lineTotal(line))}</p>
