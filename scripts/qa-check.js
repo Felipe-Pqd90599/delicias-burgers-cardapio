@@ -79,6 +79,15 @@ if (!info.ordering?.paymentMethods?.length) {
 } else {
   ok(`pedido: 1 WhatsApp · ${info.ordering.paymentMethods.length} pagamentos`);
 }
+const extras = info.ordering?.extras || [];
+if (!extras.length) {
+  err('ordering.extras ausente em restaurant-info.json');
+} else {
+  extras.forEach((extra) => {
+    if (typeof extra.price !== 'number') err(`adicional sem preço: ${extra.id || extra.name}`);
+  });
+  ok(`${extras.length} adicionais com preço`);
+}
 
 const onlinePdf = path.join(ROOT, 'online/cardapio-delicias-burgers.pdf');
 if (!fs.existsSync(onlinePdf)) {

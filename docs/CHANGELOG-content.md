@@ -1,5 +1,14 @@
 # Changelog — Menu Content
 
+## 2026-10-14 — Preços dos adicionais
+
+Felipe aprovou a tabela sugerida a partir das diferenças do cardápio oficial:
+
+- Ovo, salsicha, presunto R$ 2
+- Cheddar, coalho, catupiry, calabresa R$ 3
+- Frango R$ 4 · Bacon R$ 6 · Carne de sol R$ 10 · Camarão R$ 12
+- Batata frita segue P/M/G R$ 5 / 7 / 9
+
 ## 2026-10-14 — Carrinho antes do WhatsApp
 
 - Itens vão para o **carrinho** (com tirar / adicionais / observação / quantidade).

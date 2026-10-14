@@ -21,20 +21,20 @@
       { "key": "debito", "label": "Cartão de débito" }
     ],
     "extras": [
-      { "id": "ovo", "name": "Ovo" },
-      { "id": "bacon", "name": "Bacon" },
-      { "id": "salsicha", "name": "Salsicha" },
-      { "id": "presunto", "name": "Presunto" },
-      { "id": "queijo-cheddar", "name": "Queijo cheddar" },
-      { "id": "queijo-coalho", "name": "Queijo coalho" },
-      { "id": "catupiry", "name": "Catupiry" },
-      { "id": "calabresa", "name": "Calabresa" },
-      { "id": "frango", "name": "Frango" },
-      { "id": "carne-de-sol", "name": "Carne de sol" },
-      { "id": "camarao", "name": "Camarão" }
+      { "id": "ovo", "name": "Ovo", "price": 2 },
+      { "id": "bacon", "name": "Bacon", "price": 6 },
+      { "id": "salsicha", "name": "Salsicha", "price": 2 },
+      { "id": "presunto", "name": "Presunto", "price": 2 },
+      { "id": "queijo-cheddar", "name": "Queijo cheddar", "price": 3 },
+      { "id": "queijo-coalho", "name": "Queijo coalho", "price": 3 },
+      { "id": "catupiry", "name": "Catupiry", "price": 3 },
+      { "id": "calabresa", "name": "Calabresa", "price": 3 },
+      { "id": "frango", "name": "Frango", "price": 4 },
+      { "id": "carne-de-sol", "name": "Carne de sol", "price": 10 },
+      { "id": "camarao", "name": "Camarão", "price": 12 }
     ],
     "pricedExtraId": "adicional-batata-frita",
-    "extrasNote": "Adicionais sem preço no cardápio: a loja confirma o valor no WhatsApp."
+    "extrasNote": "Preços dos adicionais conforme a tabela da loja."
   },
   "wifi": {
     "ssid": "Delicias Burgers",
@@ -60,7 +60,7 @@
   "meta": {
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "lastUpdated": "2026-10-14",
-    "version": "0.7.0-carrinho",
+    "version": "0.7.1-adicionais",
     "g1Approved": true
   }
 }

@@ -35,7 +35,7 @@ Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card c
 
 1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio)
 2. **Tirar** — chips dos ingredientes do JSON
-3. **Adicionais** — chips oficiais + batata frita P/M/G
+3. **Adicionais** — chips oficiais com preço + batata frita P/M/G
 4. **Observação** e **quantidade**
 5. Preço da linha e **Adicionar ao carrinho** (não abre WhatsApp)
 

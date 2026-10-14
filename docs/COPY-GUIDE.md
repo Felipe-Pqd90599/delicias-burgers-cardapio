@@ -35,7 +35,7 @@ Olá, vim pelo cardápio da *Delícias Burgers*.
 *Pedido:*
 1. 2x Delícias Especial — R$ 16,00
    Tirar: ovo
-   Adicionais: bacon (confirmar valor); batata frita M R$ 7,00
+   Adicionais: bacon R$ 6,00; batata frita M R$ 7,00
    Obs.: Sem cebola demais
 2. 1x Muçarela (G) — R$ 35,00
 
@@ -55,4 +55,4 @@ Por favor, confirmem o pedido e o valor final.
 | Pagamento | PIX · Dinheiro · Cartão de crédito · Cartão de débito (só no carrinho) |
 | Botão final | Enviar pedido no WhatsApp |
 
-Omitir linhas Tirar / Adicionais / Obs. se o cliente não usou. Pagamento obrigatório só para fechar o pedido.
+Omitir linhas Tirar / Adicionais / Obs. se o cliente não usou. Pagamento obrigatório só para fechar o pedido. Adicionais entram com o preço da tabela da loja.

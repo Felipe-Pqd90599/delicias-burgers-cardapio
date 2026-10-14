@@ -132,8 +132,27 @@ function friesPriceFor(key) {
   return currentPrice(fries, key) || 0;
 }
 
+function extraPrice(name) {
+  const extra = suggestedExtras().find((item) => item.name === name);
+  return Number(extra?.price) || 0;
+}
+
+function extrasSum(names) {
+  return (names || []).reduce((sum, name) => sum + extraPrice(name), 0);
+}
+
+function formatExtra(name) {
+  const price = extraPrice(name);
+  return price ? `${name} ${formatPrice(price)}` : name;
+}
+
+function itemPlusFriesPrice() {
+  if (!state.modalItem) return 0;
+  return currentPrice(state.modalItem, state.modalPortion) + friesPriceFor(state.modalFries);
+}
+
 function lineUnitPrice(line) {
-  return Number(line.unitPrice) || 0;
+  return (Number(line.unitPrice) || 0) + extrasSum(line.extras);
 }
 
 function lineTotal(line) {
@@ -207,7 +226,7 @@ function buildCartMessage() {
     if (line.fries) {
       extras.push(`batata frita ${line.fries} ${formatPrice(line.friesPrice || 0)}`);
     }
-    (line.extras || []).forEach((name) => extras.push(`${name} (confirmar valor)`));
+    (line.extras || []).forEach((name) => extras.push(formatExtra(name)));
     if (extras.length) {
       lines.push(`   Adicionais: ${extras.join("; ")}`);
     }
@@ -218,9 +237,6 @@ function buildCartMessage() {
   lines.push("", `*Total (cardápio):* ${formatPrice(cartTotal())}`);
   const pay = paymentMethods().find((p) => p.key === state.cartPay);
   lines.push(`*Pagamento:* ${pay ? pay.label : "não informado"}`);
-  if (state.cart.some((line) => line.extras?.length)) {
-    lines.push("", "Há adicionais sem preço no cardápio para a loja confirmar.");
-  }
   lines.push("", "Por favor, confirmem o pedido e o valor final.");
   return lines.join("\n");
 }
@@ -441,7 +457,8 @@ function renderExtras(item, category) {
          ${extras
            .map((extra) => {
              const on = state.modalExtras.includes(extra.name);
-             return `<button type="button" class="modal__chip${on ? " is-on" : ""}" data-extra="${escapeHtml(extra.name)}" aria-pressed="${on}">${escapeHtml(extra.name)}</button>`;
+             const price = extra.price ? ` ${formatPrice(extra.price)}` : "";
+             return `<button type="button" class="modal__chip${on ? " is-on" : ""}" data-extra="${escapeHtml(extra.name)}" aria-pressed="${on}">${escapeHtml(extra.name)}${price}</button>`;
            })
            .join("")}
        </div>`
@@ -488,17 +505,14 @@ function renderQty() {
 }
 
 function modalUnitPrice() {
-  if (!state.modalItem) return 0;
-  return currentPrice(state.modalItem, state.modalPortion) + friesPriceFor(state.modalFries);
+  return itemPlusFriesPrice() + extrasSum(state.modalExtras);
 }
 
 function renderModalPrice() {
   const qty = state.modalQty || 1;
   document.getElementById("modal-price").textContent = formatPrice(modalUnitPrice() * qty);
   const hint = document.getElementById("modal-hint");
-  hint.textContent = state.modalExtras.length
-    ? "A loja confirma no WhatsApp o valor dos adicionais sem preço no cardápio."
-    : "O item vai para o carrinho. Você pode pedir mais coisas antes de enviar.";
+  hint.textContent = "O item vai para o carrinho. Você pode pedir mais coisas antes de enviar.";
   document.getElementById("modal-wa").innerHTML =
     `<button class="btn btn--gold" type="button" id="add-to-cart">Adicionar ao carrinho</button>`;
   document.getElementById("add-to-cart").addEventListener("click", addCurrentToCart);
@@ -521,7 +535,7 @@ function addCurrentToCart() {
     friesPrice: friesPriceFor(state.modalFries),
     friesLabel: friesOpt ? friesOpt.label : "",
     comment: state.modalComment.trim(),
-    unitPrice: modalUnitPrice(),
+    unitPrice: itemPlusFriesPrice(),
   };
   const key = lineKey(line);
   const existing = state.cart.find((row) => lineKey(row) === key);
@@ -596,7 +610,7 @@ function renderCart() {
         if (line.removed?.length) bits.push(`Tirar: ${escapeHtml(line.removed.join(", "))}`);
         const extras = [];
         if (line.fries) extras.push(`batata frita ${escapeHtml(line.fries)}`);
-        (line.extras || []).forEach((name) => extras.push(escapeHtml(name)));
+        (line.extras || []).forEach((name) => extras.push(escapeHtml(formatExtra(name))));
         if (extras.length) bits.push(`Adicionais: ${extras.join(", ")}`);
         if (line.comment) bits.push(`Obs.: ${escapeHtml(line.comment)}`);
         return `<article class="cart-line">
