@@ -22,7 +22,7 @@
       href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Pacifico&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=0.5.0-pdf" />
+    <link rel="stylesheet" href="styles.css?v=0.7.0-carrinho" />
   </head>
   <body>
     <h1 class="sr-only">Delícias Burgers — Cardápio</h1>
@@ -63,11 +63,43 @@
         <h3 id="modal-title"></h3>
         <p class="modal__desc" id="modal-desc"></p>
         <div class="modal__portions" id="modal-portions"></div>
+        <div class="modal__block" id="modal-remove" hidden></div>
+        <div class="modal__block" id="modal-extras" hidden></div>
+        <label class="modal__label" for="modal-comment">Observação</label>
+        <textarea
+          id="modal-comment"
+          class="modal__comment"
+          rows="2"
+          maxlength="240"
+          placeholder="Alergia, ponto da carne, recado para a cozinha…"
+        ></textarea>
+        <div class="modal__qty" id="modal-qty-box"></div>
         <p class="modal__price" id="modal-price"></p>
+        <p class="modal__hint" id="modal-hint"></p>
         <div class="modal__wa" id="modal-wa"></div>
       </div>
     </div>
 
-    <script src="app.js?v=0.5.0-pdf"></script>
+    <button class="cart-fab" id="cart-fab" type="button" aria-controls="cart">
+      Carrinho
+      <span class="cart-fab__count" id="cart-count">0</span>
+    </button>
+
+    <div class="cart" id="cart" hidden>
+      <div class="modal__backdrop" data-cart-close></div>
+      <div class="cart__sheet" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+        <button class="modal__close" type="button" data-cart-close aria-label="Fechar carrinho">×</button>
+        <h2 id="cart-title">Seu pedido</h2>
+        <div id="cart-list"></div>
+        <div class="modal__block" id="cart-pay"></div>
+        <p class="modal__price" id="cart-total"></p>
+        <p class="modal__hint" id="cart-hint"></p>
+        <div class="modal__wa" id="cart-actions"></div>
+      </div>
+    </div>
+
+    <p class="toast" id="toast" hidden>Adicionado ao carrinho</p>
+
+    <script src="app.js?v=0.7.0-carrinho"></script>
   </body>
 </html>

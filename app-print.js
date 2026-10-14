@@ -49,7 +49,7 @@ async function init() {
   document.getElementById("cover-meta").innerHTML = `
     <p><strong>${info.name}</strong></p>
     <p>${loc.address} · ${loc.neighborhood}, ${loc.city}-${loc.state}</p>
-    <p>${info.contact?.phone || ""} · ${info.contact?.phoneSecondary || ""} · ${info.contact?.instagram || ""}</p>
+    <p>${info.contact?.phone || ""} · ${info.contact?.instagram || ""}</p>
   `;
 
   const featured = menu.categories.find((c) => c.featured);

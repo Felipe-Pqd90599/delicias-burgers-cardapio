@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "0.5.0-pdf",
+    "version": "0.7.0-carrinho",
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "currency": "BRL",
     "extractedAt": "2026-09-15",
