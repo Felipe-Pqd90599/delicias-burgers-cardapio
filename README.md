@@ -6,7 +6,7 @@ Projeto **separado** do Prainha Rooftop. Mesma forma de trabalhar (orquestrador 
 
 ## Status
 
-**Rodízio em destaque** (R$ 34,99 terça a quinta / R$ 38,99 sexta a domingo). Fotos só nas categorias. Wi-Fi no final da página.
+**Rodízio em destaque** (R$ 34,99 terça a quinta / R$ 38,99 sexta a domingo), só para consumo no salão. Fotos só nas categorias. Delivery pelo WhatsApp, no mesmo horário da loja.
 
 Quando existir o site:
 

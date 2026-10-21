@@ -27,6 +27,7 @@ const state = {
   modalQty: 1,
   cart: [],
   cartPay: null,
+  quote: { km: null, price: null, label: "", status: "idle" },
   address: {
     name: "",
     cep: "",
@@ -182,6 +183,79 @@ function cartTotal() {
   return state.cart.reduce((sum, line) => sum + lineTotal(line), 0);
 }
 
+function deliveryConfig() {
+  return state.info?.delivery || {};
+}
+
+function deliveryFee() {
+  return Number(state.quote?.price) || 0;
+}
+
+function orderTotal() {
+  return cartTotal() + deliveryFee();
+}
+
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(a));
+}
+
+function zoneForKm(km) {
+  const cfg = deliveryConfig();
+  const zones = cfg.zones || [];
+  return zones.find((zone) => km <= zone.maxKm) || null;
+}
+
+function setQuote(next) {
+  state.quote = { km: null, price: null, label: "", status: "idle", ...next };
+}
+
+async function quoteDelivery() {
+  const cfg = deliveryConfig();
+  const origin = cfg.origin;
+  const code = digits(state.address.cep);
+  if (!origin || code.length !== 8) {
+    setQuote({ status: "idle" });
+    renderCartDelivery();
+    refreshCartSend();
+    return;
+  }
+  try {
+    const res = await fetch(`https://brasilapi.com.br/api/cep/v2/${code}`);
+    const data = await res.json();
+    const lat = Number(data?.location?.coordinates?.latitude);
+    const lng = Number(data?.location?.coordinates?.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      setQuote({ status: "unknown" });
+      renderCartDelivery();
+      refreshCartSend();
+      return;
+    }
+    const km = haversineKm(origin.lat, origin.lng, lat, lng);
+    const maxKm = Number(cfg.maxKm) || 10;
+    if (km > maxKm) {
+      setQuote({ km, price: null, label: cfg.outOfRangeNote || "Fora da área", status: "far" });
+    } else {
+      const zone = zoneForKm(km);
+      setQuote({
+        km,
+        price: zone?.price ?? null,
+        label: zone?.label || "",
+        status: zone ? "ok" : "unknown",
+      });
+    }
+  } catch {
+    setQuote({ status: "unknown" });
+  }
+  renderCartDelivery();
+  refreshCartSend();
+}
+
 function extraAlreadyInItem(item, extraName) {
   return (item.description || "").toLowerCase().includes(extraName.toLowerCase());
 }
@@ -192,6 +266,15 @@ function flavorOptions(item) {
 
 function needsFlavor(item) {
   return flavorOptions(item).length > 0;
+}
+
+function dineInOnly(item, category) {
+  return Boolean(item?.dineInOnly || category?.dineInOnly);
+}
+
+function isOrderable(item, category) {
+  if (!item || item.online === false) return false;
+  return !dineInOnly(item, category);
 }
 
 function toppingOptions(item) {
@@ -233,7 +316,11 @@ function loadCart() {
   try {
     const raw = sessionStorage.getItem(CART_KEY);
     const parsed = raw ? JSON.parse(raw) : [];
-    state.cart = Array.isArray(parsed) ? parsed : [];
+    const parsedCart = Array.isArray(parsed) ? parsed : [];
+    state.cart = parsedCart.filter((line) => {
+      const found = findItem(line.itemId);
+      return found && isOrderable(found.item, found.category);
+    });
   } catch {
     state.cart = [];
   }
@@ -290,6 +377,16 @@ function addressLines() {
     `${a.neighborhood.trim()}, ${a.city.trim()}-${(a.uf || "RN").trim()}`,
   ];
   if (a.reference.trim()) lines.push(`Ref.: ${a.reference.trim()}`);
+  const q = state.quote;
+  if (q.status === "ok" && q.km != null) {
+    lines.push(`Distância: ~${q.km.toFixed(1).replace(".", ",")} km (${q.label})`);
+    lines.push(`Taxa de entrega: ${formatPrice(q.price)}`);
+  } else if (q.status === "far") {
+    lines.push(`Distância: ~${q.km.toFixed(1).replace(".", ",")} km`);
+    lines.push(`Taxa de entrega: ${q.label || "a loja confirma"}`);
+  } else if (q.status === "unknown") {
+    lines.push("Taxa de entrega: a loja confirma pelo CEP");
+  }
   return lines;
 }
 
@@ -306,6 +403,7 @@ async function lookupCep(cep) {
     state.address.uf = data.uf || state.address.uf;
     saveAddress();
     fillAddressForm();
+    quoteDelivery();
   } catch {
     /* CEP lookup is optional */
   }
@@ -351,7 +449,16 @@ function buildCartMessage() {
       lines.push(`   Obs.: ${line.comment}`);
     }
   });
-  lines.push("", `*Total (cardápio):* ${formatPrice(cartTotal())}`);
+  lines.push("", `*Itens:* ${formatPrice(cartTotal())}`);
+  if (state.quote.status === "ok") {
+    lines.push(`*Taxa de entrega:* ${formatPrice(deliveryFee())}`);
+    lines.push(`*Total:* ${formatPrice(orderTotal())}`);
+  } else {
+    lines.push(`*Total (itens):* ${formatPrice(cartTotal())}`);
+    if (state.quote.status === "far" || state.quote.status === "unknown") {
+      lines.push("*Taxa de entrega:* a loja confirma");
+    }
+  }
   const pay = paymentMethods().find((p) => p.key === state.cartPay);
   lines.push(`*Pagamento:* ${pay ? pay.label : "não informado"}`);
   lines.push("", "*Entrega:*", ...addressLines());
@@ -362,7 +469,8 @@ function buildCartMessage() {
 function renderHero(info) {
   const place = document.getElementById("hero-place");
   const loc = info.location || {};
-  place.textContent = `${loc.address} · ${loc.neighborhood}, ${loc.city}-${loc.state}`;
+  const hours = info.hours?.delivery || info.hours?.store || "";
+  place.textContent = `${loc.address} · ${loc.neighborhood}, ${loc.city}-${loc.state}${hours ? ` · ${hours}` : ""}`;
 
   const actions = document.getElementById("hero-actions");
   const ig = info.contact?.instagram || "";
@@ -380,17 +488,6 @@ function renderHero(info) {
     "beforeend",
     `<a class="btn btn--ig" href="cardapio-delicias-burgers.pdf" target="_blank" rel="noopener">Baixar PDF</a>`
   );
-}
-
-function renderWifi(info) {
-  const box = document.getElementById("wifi");
-  const wifi = info.wifi;
-  if (!wifi?.password) return;
-  box.hidden = false;
-  document.getElementById("wifi-ssid").textContent = wifi.ssid || "";
-  document.getElementById("wifi-password").textContent = wifi.password;
-  const qr = document.getElementById("wifi-qr");
-  qr.src = wifi.qrImage || "assets/wifi-qr.png";
 }
 
 function renderNav(menu) {
@@ -422,7 +519,7 @@ function renderFeatured(menu) {
         <p class="featured__desc">${item.description}</p>
         <p class="featured__note">${cat.note || ""}</p>
         <p class="featured__price">${priceLines(item)}</p>
-        <button class="btn btn--gold" type="button" data-id="${item.id}">Quero o rodízio</button>
+        <button class="btn btn--gold" type="button" data-id="${item.id}">Ver o rodízio (só no salão)</button>
       </div>
     </section>`;
   root.querySelector("[data-id]").addEventListener("click", () => openModal(item.id));
@@ -435,6 +532,7 @@ function renderMenu(menu) {
     .map((cat) => {
       const note = cat.note ? `<p class="section__note">${cat.note}</p>` : "";
       const items = (cat.items || [])
+        .filter((item) => item.online !== false)
         .map(
           (item) => `
         <button class="item" type="button" data-id="${item.id}">
@@ -482,12 +580,22 @@ function openModal(id) {
   document.getElementById("modal-title").textContent = found.item.name;
   document.getElementById("modal-desc").textContent = found.item.description || "";
   document.getElementById("modal-comment").value = "";
+  const orderable = isOrderable(found.item, found.category);
   renderPortions(found.item);
   renderFlavors(found.item);
   renderToppings(found.item);
   renderRemove(found.item, found.category);
   renderExtras(found.item, found.category);
   renderQty();
+  document.getElementById("modal-comment").hidden = !orderable;
+  document.querySelector('label[for="modal-comment"]').hidden = !orderable;
+  if (!orderable) {
+    document.getElementById("modal-remove").hidden = true;
+    document.getElementById("modal-extras").hidden = true;
+    document.getElementById("modal-qty-box").hidden = true;
+  } else {
+    document.getElementById("modal-qty-box").hidden = false;
+  }
   renderModalPrice();
   document.getElementById("modal").hidden = false;
   lockBody();
@@ -676,6 +784,12 @@ function renderExtras(item, category) {
 
 function renderQty() {
   const box = document.getElementById("modal-qty-box");
+  if (dineInOnly(state.modalItem, state.modalCategory)) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
   box.innerHTML = `
     <span class="modal__label">Quantidade</span>
     <div class="modal__qty">
@@ -699,8 +813,15 @@ function modalUnitPrice() {
 
 function renderModalPrice() {
   const qty = state.modalQty || 1;
+  const orderable = isOrderable(state.modalItem, state.modalCategory);
   document.getElementById("modal-price").textContent = formatPrice(modalUnitPrice() * qty);
   const hint = document.getElementById("modal-hint");
+  if (!orderable) {
+    hint.textContent =
+      "Rodízio só para consumo no salão. Não entra no pedido de delivery deste site.";
+    document.getElementById("modal-wa").innerHTML = "";
+    return;
+  }
   hint.textContent =
     needsFlavor(state.modalItem) && !state.modalFlavor
       ? "Escolha o sabor para adicionar ao carrinho."
@@ -713,6 +834,10 @@ function renderModalPrice() {
 function addCurrentToCart() {
   const item = state.modalItem;
   if (!item) return;
+  if (!isOrderable(item, state.modalCategory)) {
+    showToast("Esse item é só no salão");
+    return;
+  }
   if (needsFlavor(item) && !state.modalFlavor) {
     showToast("Escolha o sabor");
     return;
@@ -820,6 +945,34 @@ function bindAddressForm() {
   }
 }
 
+function renderCartDelivery() {
+  const box = document.getElementById("cart-delivery");
+  if (!box) return;
+  if (!state.cart.length) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  const cfg = deliveryConfig();
+  const q = state.quote;
+  const zones = (cfg.zones || [])
+    .map((zone) => `${zone.label} ${formatPrice(zone.price)}`)
+    .join(" · ");
+  let body = `<p class="modal__help">${cfg.priceNote || ""} Delivery ${state.info?.hours?.delivery || ""}.</p>`;
+  if (q.status === "ok") {
+    body += `<p class="cart-delivery__quote">~${q.km.toFixed(1).replace(".", ",")} km · ${escapeHtml(q.label)} · <strong>${formatPrice(q.price)}</strong></p>`;
+  } else if (q.status === "far") {
+    body += `<p class="cart-delivery__quote">${escapeHtml(cfg.outOfRangeNote || "Fora da área")}</p>`;
+  } else if (q.status === "unknown") {
+    body += `<p class="cart-delivery__quote">Não deu para medir pelo CEP. A loja confirma a taxa no WhatsApp.</p>`;
+  } else {
+    body += `<p class="cart-delivery__quote">Preencha o CEP para calcular a taxa.</p>`;
+  }
+  if (zones) body += `<p class="modal__help">${escapeHtml(zones)}</p>`;
+  box.innerHTML = `<span class="modal__label">Taxa de entrega</span>${body}`;
+}
+
 function renderCartAddress() {
   const box = document.getElementById("cart-address");
   if (!state.cart.length) {
@@ -864,14 +1017,21 @@ function renderCartAddress() {
 function refreshCartSend() {
   const hint = document.getElementById("cart-hint");
   const actions = document.getElementById("cart-actions");
+  const totalEl = document.getElementById("cart-total");
   const phone = shopPhone(state.info);
   const ready = Boolean(state.cart.length && state.cartPay && phone && addressReady());
   if (!state.cart.length) return;
+  if (totalEl) {
+    totalEl.textContent =
+      state.quote.status === "ok"
+        ? `${formatPrice(orderTotal())} (itens + entrega)`
+        : formatPrice(cartTotal());
+  }
   hint.textContent = !state.cartPay
     ? "Escolha a forma de pagamento para enviar o pedido."
     : !addressReady()
       ? "Preencha o endereço de entrega (CEP, rua e número da casa)."
-      : "A mensagem vai com o pedido e o endereço de entrega.";
+      : "A mensagem vai com o pedido, o endereço e a taxa de entrega.";
   const href = ready ? waLink(phone, buildCartMessage()) : "#";
   actions.innerHTML = `
     <a class="btn btn--wa${ready ? "" : " is-disabled"}" href="${href}" target="_blank" rel="noopener" ${ready ? "" : 'aria-disabled="true"'}>Enviar pedido no WhatsApp</a>
@@ -964,6 +1124,7 @@ function renderCart() {
 
   renderCartPay();
   renderCartAddress();
+  renderCartDelivery();
   const totalEl = document.getElementById("cart-total");
   const hint = document.getElementById("cart-hint");
   const actions = document.getElementById("cart-actions");
@@ -973,7 +1134,10 @@ function renderCart() {
     hint.textContent = "";
     actions.innerHTML = `<button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
   } else {
-    totalEl.textContent = formatPrice(cartTotal());
+    totalEl.textContent =
+      state.quote.status === "ok"
+        ? `${formatPrice(orderTotal())} (itens + entrega)`
+        : formatPrice(cartTotal());
     refreshCartSend();
   }
 }
@@ -995,7 +1159,8 @@ function renderFooter(info) {
       }
     </div>
     <p><a href="${instagramUrl(ig)}" target="_blank" rel="noopener">${ig}</a></p>
-    <p>Rodízio das 18h às 23:30 · ${info.hours?.rodizioWeekday || ""} · ${info.hours?.rodizioWeekend || ""}</p>
+    <p>Loja e delivery ${info.hours?.store || "das 18h às 23:30"}</p>
+    <p>Rodízio (só no salão) · ${info.hours?.rodizioWeekday || ""} · ${info.hours?.rodizioWeekend || ""}</p>
     ${promo}
     <small>Cardápio digital Delícias Burgers</small>
   `;
@@ -1024,11 +1189,11 @@ async function boot() {
   ]);
   state.menu = menu;
   state.info = info;
-  loadCart();
   loadAddress();
+  loadCart();
+  if (digits(state.address.cep).length === 8) quoteDelivery();
   renderHero(info);
   renderFeatured(menu);
-  renderWifi(info);
   renderNav(menu);
   renderMenu(menu);
   renderFooter(info);

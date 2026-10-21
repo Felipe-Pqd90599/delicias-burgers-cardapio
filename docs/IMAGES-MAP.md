@@ -18,4 +18,4 @@ assets/categorias/{categoria}.png  →  banner da seção no site
 | Petiscos | `petiscos.png` |
 | Combos | `combos.png` |
 | Bebidas | `bebidas.png` |
-| Açaí e sorvete | `acai-sorvete.png` |
+| Açaí | `acai-sorvete.png` |

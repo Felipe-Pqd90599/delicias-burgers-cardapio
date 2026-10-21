@@ -78,6 +78,13 @@ const catFiles = fs.existsSync(catDir)
 ok(`${catFiles.length} fotos de categoria em assets/categorias/`);
 ok(`images-meta missingCount ${meta.missingCount}`);
 ok(`${items.length} itens em ${menu.categories.length} categorias`);
+if (items.find((i) => i.id === "sorvete")) {
+  err("sorvete não deve aparecer no cardápio online de delivery");
+}
+const rodizio = menu.categories.find((c) => c.id === "rodizio");
+if (!rodizio?.dineInOnly) {
+  err("categoria rodizio precisa de dineInOnly para não ir ao delivery");
+}
 
 const info = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/restaurant-info.json'), 'utf8'));
 if (info.contact?.whatsappSecondary || info.contact?.phoneSecondary) {
@@ -90,6 +97,11 @@ if (!info.ordering?.paymentMethods?.length) {
   err('ordering.paymentMethods ausente em restaurant-info.json');
 } else {
   ok(`pedido: 1 WhatsApp · ${info.ordering.paymentMethods.length} pagamentos`);
+}
+if (!info.delivery?.zones?.length) {
+  err('delivery.zones ausente em restaurant-info.json');
+} else {
+  ok(`entrega: ${info.delivery.zones.length} faixas até ${info.delivery.maxKm} km`);
 }
 const extras = info.ordering?.extras || [];
 if (!extras.length) {

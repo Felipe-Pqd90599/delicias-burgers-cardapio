@@ -1,5 +1,17 @@
 # Changelog — Menu Content
 
+## 2026-10-21 — Taxa de entrega por raio + horário
+
+- Site e PDF seguem propósitos diferentes: sorvete continua no PDF/salão; o online é delivery.
+- Wi-Fi só no PDF/salão — saiu da página de delivery.
+- Horário de entrega = horário da loja (18h–23:30).
+- Taxa por distância do CEP até a Av. João Medeiros Filho, 3030 (tabela inicial): até 3 km R$ 6 · 3–6 km R$ 9 · 6–10 km R$ 13 · acima a loja confirma.
+
+## 2026-10-21 — Delivery: sem sorvete; rodízio só no salão
+
+- Sorvete saiu do cardápio **online** (não faz sentido no delivery).
+- Rodízio permanece visível como carro-chefe, com aviso de **consumo apenas no salão**; não entra no carrinho/WhatsApp.
+
 ## 2026-10-21 — Entrega + acompanhamentos do sorvete
 
 - Sorvete usa a mesma lista de acompanhamentos do açaí, no máximo **2** (como no cardápio: 2 bolas + 2 acompanhamentos).

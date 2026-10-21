@@ -18,7 +18,7 @@
 1. **Hero** — logo circular (burger + DELÍCIAS + script Burgers), fundo preto com splash dourado
 2. **Título de seção** — “CARDÁPIO” em dourado/outline; categoria em branco (SANDUÍCHES, PIZZAS…)
 3. **Item** — nome branco em caixa alta; preço amarelo à direita; descrição em serif claro
-4. **Rodapé / Wi-Fi** — senha visível + QR Code (padrão `WIFI:`) para o cliente conectar sem digitar
+4. **Rodapé** — endereço, WhatsApp, horário da loja/delivery. Wi-Fi só no PDF do salão.
 
 ## Site (mobile-first)
 
@@ -33,7 +33,7 @@
 
 Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card centralizado.
 
-1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio) + sabor (milk shake / sucos) + acompanhamentos do açaí (máx. 4) e do sorvete (máx. 2)
+1. Nome + descrição + tamanho (pílulas G/GG, P/M/G) + sabor (milk shake / sucos) + acompanhamentos do açaí (máx. 4). Rodízio: destaque só no salão, sem carrinho.
 2. **Tirar** — chips dos ingredientes do JSON
 3. **Adicionais** — chips oficiais com preço + batata frita P/M/G
 4. **Observação** e **quantidade**
@@ -45,7 +45,7 @@ Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card c
 - Painel no mesmo padrão do modal
 - Cada linha: nome, alterações, preço, quantidade, remover
 - **Pagamento** só aqui
-- **Endereço de entrega** (CEP, rua, número, bairro, complemento, referência) antes do WhatsApp
+- **Endereço de entrega** (CEP, rua, número, bairro, complemento, referência) e **taxa por raio** antes do WhatsApp
 - **Enviar pedido no WhatsApp** com o pedido inteiro (desabilitado até haver pagamento, endereço e pelo menos 1 item)
 - “Continuar escolhendo” fecha o painel e volta ao cardápio
 

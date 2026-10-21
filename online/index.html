@@ -11,7 +11,7 @@
     <meta property="og:title" content="Delícias Burgers — Cardápio" />
     <meta
       property="og:description"
-      content="Veja o cardápio completo, conecte no Wi-Fi e peça pelo WhatsApp."
+      content="Veja o cardápio e peça delivery pelo WhatsApp."
     />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="assets/capa.png" />
@@ -22,7 +22,7 @@
       href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Pacifico&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=0.8.0-entrega" />
+    <link rel="stylesheet" href="styles.css?v=0.8.2-delivery" />
   </head>
   <body>
     <h1 class="sr-only">Delícias Burgers — Cardápio</h1>
@@ -41,20 +41,6 @@
     <main class="menu" id="menu"></main>
 
     <footer class="footer" id="footer"></footer>
-
-    <section class="wifi" id="wifi" aria-labelledby="wifi-title" hidden>
-      <div class="wifi__text">
-        <h2 id="wifi-title">Wi-Fi da casa</h2>
-        <p class="wifi__hint">Aponte a câmera do celular no QR para conectar</p>
-        <p class="wifi__row">
-          Rede <strong id="wifi-ssid"></strong>
-        </p>
-        <p class="wifi__row">
-          Senha <strong id="wifi-password"></strong>
-        </p>
-      </div>
-      <img class="wifi__qr" id="wifi-qr" alt="QR Code para conectar no Wi-Fi" />
-    </section>
 
     <div class="modal" id="modal" hidden>
       <div class="modal__backdrop" data-close></div>
@@ -95,6 +81,7 @@
         <div id="cart-list"></div>
         <div class="modal__block" id="cart-pay"></div>
         <div class="modal__block" id="cart-address" hidden></div>
+        <div class="modal__block" id="cart-delivery" hidden></div>
         <p class="modal__price" id="cart-total"></p>
         <p class="modal__hint" id="cart-hint"></p>
         <div class="modal__wa" id="cart-actions"></div>
@@ -103,6 +90,6 @@
 
     <p class="toast" id="toast" hidden>Adicionado ao carrinho</p>
 
-    <script src="app.js?v=0.8.0-entrega"></script>
+    <script src="app.js?v=0.8.2-delivery"></script>
   </body>
 </html>

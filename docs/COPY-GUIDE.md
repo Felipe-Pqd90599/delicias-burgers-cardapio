@@ -15,7 +15,8 @@
 |----------|--------|
 | Nome | Como no cardápio (Delícias Burguer, Delícias da Casa) |
 | Descrição | Ingredientes separados por vírgula |
-| Consultar | Só no sorvete e na fatia do combo kids. Milk shake e sucos usam a lista de sabores do JSON |
+| Consultar | Só na fatia do combo kids. Milk shake e sucos usam a lista de sabores do JSON |
+| Rodízio | Só no salão; no site avisa e não vai para o delivery |
 | Pedido pizza | Sempre “Pizza de {sabor} G/GG”, nunca só o sabor |
 | Preços | Só no JSON |
 
@@ -44,7 +45,9 @@ Olá, vim pelo cardápio do *Delícias Burgers*.
 5. 1x Açaí 300 ml — R$ 12,00
    Acompanhamentos: leite condensado, granola, banana, coco ralado
 
-*Total (cardápio):* R$ 51,00
+*Itens:* R$ 51,00
+*Taxa de entrega:* R$ 9,00
+*Total:* R$ 60,00
 *Pagamento:* PIX
 
 *Entrega:*
@@ -67,4 +70,4 @@ Por favor, confirmem o pedido e o valor final.
 | Pagamento | PIX · Dinheiro · Cartão de crédito · Cartão de débito (só no carrinho) |
 | Botão final | Enviar pedido no WhatsApp |
 
-Omitir linhas Tirar / Adicionais / Acompanhamentos / Obs. se o cliente não usou. Pagamento e endereço de entrega obrigatórios para fechar o pedido. Adicionais entram com o preço da tabela da loja. Açaí: até 4 acompanhamentos. Sorvete: até 2, mesma lista. Mensagem: “cardápio do Delícias Burgers”.
+Omitir linhas Tirar / Adicionais / Acompanhamentos / Obs. se o cliente não usou. Pagamento e endereço de entrega obrigatórios para fechar o pedido. Taxa de entrega estimada pelo CEP (raio da loja). Adicionais entram com o preço da tabela da loja. Açaí: até 4 acompanhamentos. Sorvete não entra no delivery. Mensagem: “cardápio do Delícias Burgers”. Site de delivery e PDF do salão podem divergir de propósito.

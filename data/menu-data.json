@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "0.8.0-entrega",
+    "version": "0.8.2-delivery",
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "currency": "BRL",
     "extractedAt": "2026-09-15",
@@ -12,13 +12,15 @@
       "name": "Rodízio",
       "order": 1,
       "featured": true,
+      "dineInOnly": true,
       "image": "categorias/rodizio.png",
-      "note": "Das 18h às 23:30. Refrigerante incluso.",
+      "note": "Apenas para consumo no salão. Das 18h às 23:30. Refrigerante incluso. Não entra no pedido de delivery.",
       "items": [
         {
           "id": "rodizio-delicias",
           "name": "Rodízio Delícias",
-          "description": "Pizzas salgadas e doces, arroz cremoso, parmegiana, lasanha, batata frita e coxinha. Refrigerante incluso.",
+          "dineInOnly": true,
+          "description": "Pizzas salgadas e doces, arroz cremoso, parmegiana, lasanha, batata frita e coxinha. Refrigerante incluso. Consumo apenas no salão — não disponível no delivery.",
           "portionOptions": [
             { "key": "terca-quinta", "label": "Terça a quinta", "price": 34.99 },
             { "key": "sexta-domingo", "label": "Sexta a domingo", "price": 38.99 }
@@ -820,7 +822,7 @@
     },
     {
       "id": "acai-sorvete",
-      "name": "Açaí e sorvete",
+      "name": "Açaí",
       "order": 9,
       "image": "categorias/acai-sorvete.png",
       "items": [
@@ -835,28 +837,6 @@
             { "key": "500ml", "label": "500 ml", "price": 18 }
           ],
           "toppingLimit": 4,
-          "toppingOptions": [
-            "Leite condensado",
-            "Leite em pó",
-            "Granola",
-            "Cobertura de morango",
-            "Cobertura de chocolate",
-            "Ovomaltine",
-            "Confete",
-            "Granulado de chocolate",
-            "Coco ralado",
-            "Amendoim triturado",
-            "Banana",
-            "Abacaxi"
-          ]
-        },
-        {
-          "id": "sorvete",
-          "name": "Sorvete",
-          "price": 4,
-          "description": "2 bolas + até 2 acompanhamentos. Consultar sabores",
-          "image": "sorvete.jpg",
-          "toppingLimit": 2,
           "toppingOptions": [
             "Leite condensado",
             "Leite em pó",
