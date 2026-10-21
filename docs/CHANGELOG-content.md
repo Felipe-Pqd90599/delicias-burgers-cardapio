@@ -1,5 +1,9 @@
 # Changelog — Menu Content
 
+## 2026-10-21 — Tabela de frete confirmada
+
+Felipe: até 3 km **grátis** · 3 a 6 km **R$ 3** · 6 a 10 km **R$ 6** · acima de 10 km confirmar no WhatsApp.
+
 ## 2026-10-21 — Taxa de entrega por raio + horário
 
 - Site e PDF seguem propósitos diferentes: sorvete continua no PDF/salão; o online é delivery.

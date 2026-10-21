@@ -46,8 +46,8 @@ Olá, vim pelo cardápio do *Delícias Burgers*.
    Acompanhamentos: leite condensado, granola, banana, coco ralado
 
 *Itens:* R$ 51,00
-*Taxa de entrega:* R$ 9,00
-*Total:* R$ 60,00
+*Taxa de entrega:* grátis
+*Total:* R$ 51,00
 *Pagamento:* PIX
 
 *Entrega:*

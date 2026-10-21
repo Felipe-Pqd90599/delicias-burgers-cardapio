@@ -57,12 +57,12 @@
     },
     "maxKm": 10,
     "zones": [
-      { "maxKm": 3, "price": 6, "label": "Até 3 km" },
-      { "maxKm": 6, "price": 9, "label": "3 a 6 km" },
-      { "maxKm": 10, "price": 13, "label": "6 a 10 km" }
+      { "maxKm": 3, "price": 0, "label": "Até 3 km" },
+      { "maxKm": 6, "price": 3, "label": "3 a 6 km" },
+      { "maxKm": 10, "price": 6, "label": "6 a 10 km" }
     ],
-    "outOfRangeNote": "Fora da área de 10 km — a loja confirma se entrega e o valor",
-    "priceNote": "Taxa estimada pela distância do CEP até a loja. Tabela inicial, a loja pode ajustar."
+    "outOfRangeNote": "Acima de 10 km — confirmar entrega e valor no WhatsApp",
+    "priceNote": "Taxa estimada pela distância do CEP até a loja."
   },
   "policies": {
     "birthdayRodizio": [
@@ -77,7 +77,7 @@
   "meta": {
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "lastUpdated": "2026-10-21",
-    "version": "0.8.2-delivery",
+    "version": "0.8.3-frete",
     "g1Approved": true
   }
 }
