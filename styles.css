@@ -713,6 +713,12 @@ a {
   outline-offset: 1px;
 }
 
+.cart-delivery__quote {
+  margin: 0.35rem 0 0.2rem;
+  color: var(--yellow);
+  font-weight: 700;
+}
+
 .cart-empty {
   color: var(--muted);
   margin: 0.4rem 0 1rem;
