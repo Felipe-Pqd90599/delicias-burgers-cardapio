@@ -49,6 +49,10 @@ function formatPrice(value) {
   });
 }
 
+function formatDeliveryFee(value) {
+  return Number(value) > 0 ? formatPrice(value) : "grátis";
+}
+
 function waLink(phone, text) {
   const msg = encodeURIComponent(text || GREETING.replace(/\*/g, ""));
   return `https://wa.me/${phone}?text=${msg}`;
@@ -193,6 +197,13 @@ function deliveryFee() {
 
 function orderTotal() {
   return cartTotal() + deliveryFee();
+}
+
+function orderTotalLabel() {
+  if (state.quote.status !== "ok") return formatPrice(cartTotal());
+  return deliveryFee()
+    ? `${formatPrice(orderTotal())} (itens + entrega)`
+    : `${formatPrice(orderTotal())} (entrega grátis)`;
 }
 
 function haversineKm(lat1, lng1, lat2, lng2) {
@@ -380,7 +391,7 @@ function addressLines() {
   const q = state.quote;
   if (q.status === "ok" && q.km != null) {
     lines.push(`Distância: ~${q.km.toFixed(1).replace(".", ",")} km (${q.label})`);
-    lines.push(`Taxa de entrega: ${formatPrice(q.price)}`);
+    lines.push(`Taxa de entrega: ${formatDeliveryFee(q.price)}`);
   } else if (q.status === "far") {
     lines.push(`Distância: ~${q.km.toFixed(1).replace(".", ",")} km`);
     lines.push(`Taxa de entrega: ${q.label || "a loja confirma"}`);
@@ -451,7 +462,7 @@ function buildCartMessage() {
   });
   lines.push("", `*Itens:* ${formatPrice(cartTotal())}`);
   if (state.quote.status === "ok") {
-    lines.push(`*Taxa de entrega:* ${formatPrice(deliveryFee())}`);
+    lines.push(`*Taxa de entrega:* ${formatDeliveryFee(deliveryFee())}`);
     lines.push(`*Total:* ${formatPrice(orderTotal())}`);
   } else {
     lines.push(`*Total (itens):* ${formatPrice(cartTotal())}`);
@@ -957,11 +968,11 @@ function renderCartDelivery() {
   const cfg = deliveryConfig();
   const q = state.quote;
   const zones = (cfg.zones || [])
-    .map((zone) => `${zone.label} ${formatPrice(zone.price)}`)
+    .map((zone) => `${zone.label} ${formatDeliveryFee(zone.price)}`)
     .join(" · ");
   let body = `<p class="modal__help">${cfg.priceNote || ""} Delivery ${state.info?.hours?.delivery || ""}.</p>`;
   if (q.status === "ok") {
-    body += `<p class="cart-delivery__quote">~${q.km.toFixed(1).replace(".", ",")} km · ${escapeHtml(q.label)} · <strong>${formatPrice(q.price)}</strong></p>`;
+    body += `<p class="cart-delivery__quote">~${q.km.toFixed(1).replace(".", ",")} km · ${escapeHtml(q.label)} · <strong>${formatDeliveryFee(q.price)}</strong></p>`;
   } else if (q.status === "far") {
     body += `<p class="cart-delivery__quote">${escapeHtml(cfg.outOfRangeNote || "Fora da área")}</p>`;
   } else if (q.status === "unknown") {
@@ -1022,10 +1033,7 @@ function refreshCartSend() {
   const ready = Boolean(state.cart.length && state.cartPay && phone && addressReady());
   if (!state.cart.length) return;
   if (totalEl) {
-    totalEl.textContent =
-      state.quote.status === "ok"
-        ? `${formatPrice(orderTotal())} (itens + entrega)`
-        : formatPrice(cartTotal());
+    totalEl.textContent = orderTotalLabel();
   }
   hint.textContent = !state.cartPay
     ? "Escolha a forma de pagamento para enviar o pedido."
@@ -1134,10 +1142,7 @@ function renderCart() {
     hint.textContent = "";
     actions.innerHTML = `<button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
   } else {
-    totalEl.textContent =
-      state.quote.status === "ok"
-        ? `${formatPrice(orderTotal())} (itens + entrega)`
-        : formatPrice(cartTotal());
+    totalEl.textContent = orderTotalLabel();
     refreshCartSend();
   }
 }
