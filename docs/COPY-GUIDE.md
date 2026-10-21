@@ -31,7 +31,7 @@
 O cliente monta o **carrinho** e só então envia. Tom direto, sem redigir:
 
 ```
-Olá, vim pelo cardápio da *Delícias Burgers*.
+Olá, vim pelo cardápio do *Delícias Burgers*.
 
 *Pedido:*
 1. 2x Delícias Especial — R$ 16,00
@@ -47,6 +47,13 @@ Olá, vim pelo cardápio da *Delícias Burgers*.
 *Total (cardápio):* R$ 51,00
 *Pagamento:* PIX
 
+*Entrega:*
+Nome: Maria
+CEP: 59100-000
+Avenida Exemplo, 100 — apto 2
+Zona Norte, Natal-RN
+Ref.: portão azul
+
 Por favor, confirmem o pedido e o valor final.
 ```
 
@@ -60,4 +67,4 @@ Por favor, confirmem o pedido e o valor final.
 | Pagamento | PIX · Dinheiro · Cartão de crédito · Cartão de débito (só no carrinho) |
 | Botão final | Enviar pedido no WhatsApp |
 
-Omitir linhas Tirar / Adicionais / Acompanhamentos / Obs. se o cliente não usou. Pagamento obrigatório só para fechar o pedido. Adicionais entram com o preço da tabela da loja. Açaí: até 4 acompanhamentos.
+Omitir linhas Tirar / Adicionais / Acompanhamentos / Obs. se o cliente não usou. Pagamento e endereço de entrega obrigatórios para fechar o pedido. Adicionais entram com o preço da tabela da loja. Açaí: até 4 acompanhamentos. Sorvete: até 2, mesma lista. Mensagem: “cardápio do Delícias Burgers”.

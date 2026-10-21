@@ -33,7 +33,7 @@
 
 Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card centralizado.
 
-1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio) + sabor (milk shake / sucos) + acompanhamentos do açaí (máx. 4)
+1. Nome + descrição + tamanho (pílulas G/GG, P/M/G, dia do rodízio) + sabor (milk shake / sucos) + acompanhamentos do açaí (máx. 4) e do sorvete (máx. 2)
 2. **Tirar** — chips dos ingredientes do JSON
 3. **Adicionais** — chips oficiais com preço + batata frita P/M/G
 4. **Observação** e **quantidade**
@@ -45,7 +45,8 @@ Bottom sheet no celular (`max-height: 92vh`, scroll interno); no desktop, card c
 - Painel no mesmo padrão do modal
 - Cada linha: nome, alterações, preço, quantidade, remover
 - **Pagamento** só aqui
-- **Enviar pedido no WhatsApp** com o pedido inteiro (desabilitado até haver pagamento e pelo menos 1 item)
+- **Endereço de entrega** (CEP, rua, número, bairro, complemento, referência) antes do WhatsApp
+- **Enviar pedido no WhatsApp** com o pedido inteiro (desabilitado até haver pagamento, endereço e pelo menos 1 item)
 - “Continuar escolhendo” fecha o painel e volta ao cardápio
 
 Não pedir dois números. Não enviar WhatsApp no clique do item.

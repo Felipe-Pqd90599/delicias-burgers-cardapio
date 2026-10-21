@@ -9,6 +9,8 @@ const EXTRA_CATS = new Set([
 
 const REMOVE_CATS = new Set([...EXTRA_CATS, "rodizio"]);
 const CART_KEY = "delicias-cart-v1";
+const ADDRESS_KEY = "delicias-address-v1";
+const GREETING = "Olá, vim pelo cardápio do *Delícias Burgers*.";
 
 const state = {
   menu: null,
@@ -25,6 +27,17 @@ const state = {
   modalQty: 1,
   cart: [],
   cartPay: null,
+  address: {
+    name: "",
+    cep: "",
+    street: "",
+    number: "",
+    complement: "",
+    neighborhood: "",
+    city: "Natal",
+    uf: "RN",
+    reference: "",
+  },
   toastTimer: null,
 };
 
@@ -36,7 +49,7 @@ function formatPrice(value) {
 }
 
 function waLink(phone, text) {
-  const msg = encodeURIComponent(text || "Olá, vim pelo cardápio da Delícias Burgers.");
+  const msg = encodeURIComponent(text || GREETING.replace(/\*/g, ""));
   return `https://wa.me/${phone}?text=${msg}`;
 }
 
@@ -230,6 +243,74 @@ function saveCart() {
   sessionStorage.setItem(CART_KEY, JSON.stringify(state.cart));
 }
 
+function loadAddress() {
+  try {
+    const raw = sessionStorage.getItem(ADDRESS_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && typeof parsed === "object") {
+      state.address = { ...state.address, ...parsed };
+    }
+  } catch {
+    /* keep defaults */
+  }
+}
+
+function saveAddress() {
+  sessionStorage.setItem(ADDRESS_KEY, JSON.stringify(state.address));
+}
+
+function digits(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+function formatCep(value) {
+  const d = digits(value).slice(0, 8);
+  if (d.length <= 5) return d;
+  return `${d.slice(0, 5)}-${d.slice(5)}`;
+}
+
+function addressReady() {
+  const a = state.address;
+  return Boolean(
+    a.name.trim() &&
+      digits(a.cep).length === 8 &&
+      a.street.trim() &&
+      a.number.trim() &&
+      a.neighborhood.trim() &&
+      a.city.trim()
+  );
+}
+
+function addressLines() {
+  const a = state.address;
+  const lines = [
+    `Nome: ${a.name.trim()}`,
+    `CEP: ${formatCep(a.cep)}`,
+    `${a.street.trim()}, ${a.number.trim()}${a.complement.trim() ? ` — ${a.complement.trim()}` : ""}`,
+    `${a.neighborhood.trim()}, ${a.city.trim()}-${(a.uf || "RN").trim()}`,
+  ];
+  if (a.reference.trim()) lines.push(`Ref.: ${a.reference.trim()}`);
+  return lines;
+}
+
+async function lookupCep(cep) {
+  const code = digits(cep);
+  if (code.length !== 8) return;
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${code}/json/`);
+    const data = await res.json();
+    if (!data || data.erro) return;
+    state.address.street = data.logradouro || state.address.street;
+    state.address.neighborhood = data.bairro || state.address.neighborhood;
+    state.address.city = data.localidade || state.address.city;
+    state.address.uf = data.uf || state.address.uf;
+    saveAddress();
+    fillAddressForm();
+  } catch {
+    /* CEP lookup is optional */
+  }
+}
+
 function lockBody() {
   const modalOpen = !document.getElementById("modal").hidden;
   const cartOpen = !document.getElementById("cart").hidden;
@@ -247,7 +328,7 @@ function showToast(text) {
 }
 
 function buildCartMessage() {
-  const lines = ["Olá, vim pelo cardápio da *Delícias Burgers*.", "", "*Pedido:*"];
+  const lines = [GREETING, "", "*Pedido:*"];
   state.cart.forEach((line, index) => {
     lines.push(
       `${index + 1}. ${line.qty}x ${displayLineName(line)} — ${formatPrice(lineTotal(line))}`
@@ -273,6 +354,7 @@ function buildCartMessage() {
   lines.push("", `*Total (cardápio):* ${formatPrice(cartTotal())}`);
   const pay = paymentMethods().find((p) => p.key === state.cartPay);
   lines.push(`*Pagamento:* ${pay ? pay.label : "não informado"}`);
+  lines.push("", "*Entrega:*", ...addressLines());
   lines.push("", "Por favor, confirmem o pedido e o valor final.");
   return lines.join("\n");
 }
@@ -689,6 +771,119 @@ function renderCartFab() {
   document.getElementById("cart-count").textContent = String(cartCount());
 }
 
+function fillAddressForm() {
+  const box = document.getElementById("cart-address");
+  if (!box || box.hidden) return;
+  const a = state.address;
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value;
+  };
+  set("addr-name", a.name);
+  set("addr-cep", formatCep(a.cep));
+  set("addr-street", a.street);
+  set("addr-number", a.number);
+  set("addr-complement", a.complement);
+  set("addr-neighborhood", a.neighborhood);
+  set("addr-city", a.city);
+  set("addr-reference", a.reference);
+}
+
+function bindAddressForm() {
+  const map = {
+    "addr-name": "name",
+    "addr-street": "street",
+    "addr-number": "number",
+    "addr-complement": "complement",
+    "addr-neighborhood": "neighborhood",
+    "addr-city": "city",
+    "addr-reference": "reference",
+  };
+  Object.entries(map).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      state.address[key] = el.value;
+      saveAddress();
+      refreshCartSend();
+    });
+  });
+  const cep = document.getElementById("addr-cep");
+  if (cep) {
+    cep.addEventListener("input", () => {
+      state.address.cep = formatCep(cep.value);
+      cep.value = state.address.cep;
+      saveAddress();
+      refreshCartSend();
+      if (digits(state.address.cep).length === 8) lookupCep(state.address.cep);
+    });
+  }
+}
+
+function renderCartAddress() {
+  const box = document.getElementById("cart-address");
+  if (!state.cart.length) {
+    box.hidden = true;
+    box.innerHTML = "";
+    return;
+  }
+  box.hidden = false;
+  box.innerHTML = `
+    <span class="modal__label">Endereço de entrega</span>
+    <p class="modal__help">Preencha para o pedido chegar certo. O CEP completa rua e bairro.</p>
+    <div class="addr">
+      <label class="addr__full">Nome
+        <input id="addr-name" type="text" autocomplete="name" maxlength="80" required />
+      </label>
+      <label>CEP
+        <input id="addr-cep" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" required />
+      </label>
+      <label>Número
+        <input id="addr-number" type="text" autocomplete="address-line2" maxlength="12" required />
+      </label>
+      <label class="addr__full">Rua / avenida
+        <input id="addr-street" type="text" autocomplete="address-line1" maxlength="120" required />
+      </label>
+      <label class="addr__full">Complemento
+        <input id="addr-complement" type="text" maxlength="80" placeholder="Apto, bloco, casa…" />
+      </label>
+      <label>Bairro
+        <input id="addr-neighborhood" type="text" maxlength="80" required />
+      </label>
+      <label>Cidade
+        <input id="addr-city" type="text" maxlength="80" required />
+      </label>
+      <label class="addr__full">Ponto de referência
+        <input id="addr-reference" type="text" maxlength="120" placeholder="Portão, cor da casa, próximo a…" />
+      </label>
+    </div>`;
+  fillAddressForm();
+  bindAddressForm();
+}
+
+function refreshCartSend() {
+  const hint = document.getElementById("cart-hint");
+  const actions = document.getElementById("cart-actions");
+  const phone = shopPhone(state.info);
+  const ready = Boolean(state.cart.length && state.cartPay && phone && addressReady());
+  if (!state.cart.length) return;
+  hint.textContent = !state.cartPay
+    ? "Escolha a forma de pagamento para enviar o pedido."
+    : !addressReady()
+      ? "Preencha o endereço de entrega (CEP, rua e número da casa)."
+      : "A mensagem vai com o pedido e o endereço de entrega.";
+  const href = ready ? waLink(phone, buildCartMessage()) : "#";
+  actions.innerHTML = `
+    <a class="btn btn--wa${ready ? "" : " is-disabled"}" href="${href}" target="_blank" rel="noopener" ${ready ? "" : 'aria-disabled="true"'}>Enviar pedido no WhatsApp</a>
+    <button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
+  actions.querySelector("a").addEventListener("click", (event) => {
+    if (!ready) {
+      event.preventDefault();
+      showToast(!state.cartPay ? "Escolha o pagamento" : "Preencha o endereço");
+    }
+  });
+}
+
 function renderCartPay() {
   const box = document.getElementById("cart-pay");
   if (!state.cart.length) {
@@ -768,11 +963,10 @@ function renderCart() {
   }
 
   renderCartPay();
+  renderCartAddress();
   const totalEl = document.getElementById("cart-total");
   const hint = document.getElementById("cart-hint");
   const actions = document.getElementById("cart-actions");
-  const phone = shopPhone(state.info);
-  const ready = Boolean(state.cart.length && state.cartPay && phone);
 
   if (!state.cart.length) {
     totalEl.textContent = "";
@@ -780,16 +974,7 @@ function renderCart() {
     actions.innerHTML = `<button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
   } else {
     totalEl.textContent = formatPrice(cartTotal());
-    hint.textContent = ready
-      ? "A mensagem vai com todos os itens do carrinho."
-      : "Escolha a forma de pagamento para enviar o pedido.";
-    const href = ready ? waLink(phone, buildCartMessage()) : "#";
-    actions.innerHTML = `
-      <a class="btn btn--wa${ready ? "" : " is-disabled"}" href="${href}" target="_blank" rel="noopener" ${ready ? "" : 'aria-disabled="true"'}>Enviar pedido no WhatsApp</a>
-      <button class="btn btn--ghost" type="button" data-cart-close>Continuar escolhendo</button>`;
-    actions.querySelector("a").addEventListener("click", (event) => {
-      if (!ready) event.preventDefault();
-    });
+    refreshCartSend();
   }
 }
 
@@ -840,6 +1025,7 @@ async function boot() {
   state.menu = menu;
   state.info = info;
   loadCart();
+  loadAddress();
   renderHero(info);
   renderFeatured(menu);
   renderWifi(info);

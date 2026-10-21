@@ -1,5 +1,11 @@
 # Changelog — Menu Content
 
+## 2026-10-21 — Entrega + acompanhamentos do sorvete
+
+- Sorvete usa a mesma lista de acompanhamentos do açaí, no máximo **2** (como no cardápio: 2 bolas + 2 acompanhamentos).
+- Pedido no WhatsApp pede endereço de entrega (CEP, rua, número, bairro, etc.) antes de enviar.
+- Mensagem: “cardápio **do** Delícias Burgers”.
+
 ## 2026-10-14 — Acompanhamentos do açaí
 
 Lista do Felipe (máximo 4): leite condensado, leite em pó, granola, cobertura de morango, cobertura de chocolate, ovomaltine, confete, granulado de chocolate, coco ralado, amendoim triturado, banana e abacaxi.

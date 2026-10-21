@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": "0.7.3-acai",
+    "version": "0.8.0-entrega",
     "source": "assets/referencias/cardapio-oficial-delicias-burgers.pdf",
     "currency": "BRL",
     "extractedAt": "2026-09-15",
@@ -854,8 +854,23 @@
           "id": "sorvete",
           "name": "Sorvete",
           "price": 4,
-          "description": "2 bolas + 2 acompanhamentos. Consultar sabores",
-          "image": "sorvete.jpg"
+          "description": "2 bolas + até 2 acompanhamentos. Consultar sabores",
+          "image": "sorvete.jpg",
+          "toppingLimit": 2,
+          "toppingOptions": [
+            "Leite condensado",
+            "Leite em pó",
+            "Granola",
+            "Cobertura de morango",
+            "Cobertura de chocolate",
+            "Ovomaltine",
+            "Confete",
+            "Granulado de chocolate",
+            "Coco ralado",
+            "Amendoim triturado",
+            "Banana",
+            "Abacaxi"
+          ]
         }
       ]
     }
